@@ -445,7 +445,7 @@ class Form(InlineUnit):
                             caption=form.get("text"),
                             parse_mode="HTML",
                             photo_url=form["photo"],
-                            thumb_url=(
+                            thumbnail_url=(
                                 "https://img.icons8.com/cotton/452/moon-satellite.png"
                             ),
                             reply_markup=self.generate_markup(
