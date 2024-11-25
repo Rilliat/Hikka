@@ -5,8 +5,9 @@
 # 🔑 https://www.gnu.org/licenses/agpl-3.0.html
 
 import logging
+from typing import Any
 
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, User
 from aiogram.types import InlineQuery as AiogramInlineQuery
 from aiogram.types import InlineQueryResultArticle, InputTextMessageContent
 from aiogram.types import Message as AiogramMessage
@@ -195,9 +196,11 @@ class BotMessage(AiogramMessage):
 class InlineQuery(AiogramInlineQuery):
     """Modified version of original Aiogram InlineQuery"""
 
-    def __init__(self, inline_query: AiogramInlineQuery):
-        super().__init__(self)
+    def __init__(self, inline_query: AiogramInlineQuery, *, id: str, from_user: User, query: str, offset: str,
+                 **__pydantic_kwargs: Any):
+        # super().__init__()
 
+        super().__init__(id=id, from_user=from_user, query=query, offset=offset, **__pydantic_kwargs)
         for attr in {"id", "from_user", "query", "offset", "chat_type", "location"}:
             setattr(self, attr, getattr(inline_query, attr, None))
 
