@@ -356,10 +356,12 @@ class TelegramLogsHandler(logging.Handler):
                 )
                 for client_id in self._mods
             }
+            def _workaround(*args):
+                return args
 
             self._exc_queue = {
                 client_id: [
-                    self._mods[client_id].inline.bot.send_message(
+                    _workaround(
                         self._mods[client_id].logchat,
                         item[0].message,
                         reply_markup=self._mods[client_id].inline.generate_markup(
@@ -384,9 +386,9 @@ class TelegramLogsHandler(logging.Handler):
                 for client_id in self._mods
             }
 
-            for exceptions in self._exc_queue.values():
+            for client_id, exceptions in self._exc_queue.items():
                 for exc in exceptions:
-                    await exc
+                    await self._mods[client_id].inline.bot.send_message(**exc)
 
             self.tg_buff = []
 
