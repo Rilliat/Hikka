@@ -412,13 +412,13 @@ class Events(InlineUnit):
                         title=self.translator.getkey("inline.command").format(name),
                         description=doc,
                         input_message_content=InputTextMessageContent(
-                            (
+                            message_text=(
                                 self.translator.getkey("inline.command_msg").format(
                                     utils.escape_html(name),
                                     utils.escape_html(doc),
                                 )
                             ),
-                            "HTML",
+                            parse_mode="HTML",
                             disable_web_page_preview=True,
                         ),
                         thumb_url=thumb,
