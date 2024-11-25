@@ -28,11 +28,9 @@ from aiogram.types import (
     InputMediaPhoto,
     InputMediaVideo,
 )
-from aiogram.utils.exceptions import (
-    BadRequest,
-    MessageIdInvalid,
-    MessageNotModified,
-    RetryAfter,
+from aiogram.exceptions import (
+    TelegramBadRequest,
+    TelegramRetryAfter,
 )
 from hikkatl.utils import resolve_inline_message_id
 
@@ -477,24 +475,25 @@ class Utils(InlineUnit):
                         else unit.get("buttons", [])
                     ),
                 )
-            except MessageNotModified:
+
+            except TelegramRetryAfter as e:
+                logger.info("Sleeping %ss on aiogram FloodWait...", e.retry_after)
+                await asyncio.sleep(e.retry_after)
+                return await self._edit_unit(**utils.get_kwargs())
+
+            except TelegramBadRequest as e:
                 if query:
                     with contextlib.suppress(Exception):
                         await query.answer()
+                    return False
 
-                return False
-            except RetryAfter as e:
-                logger.info("Sleeping %ss on aiogram FloodWait...", e.timeout)
-                await asyncio.sleep(e.timeout)
-                return await self._edit_unit(**utils.get_kwargs())
-            except MessageIdInvalid:
-                with contextlib.suppress(Exception):
-                    await query.answer(
-                        "I should have edited some message, but it is deleted :("
-                    )
+                if 'deleted' in str(e).lower():
+                    with contextlib.suppress(Exception):
+                        await query.answer(
+                            "I should have edited some message, but it is deleted :("
+                        )
+                    return False
 
-                return False
-            except BadRequest as e:
                 if "There is no text in the message to edit" not in str(e):
                     raise
 
@@ -533,11 +532,11 @@ class Utils(InlineUnit):
                     else unit.get("buttons", [])
                 ),
             )
-        except RetryAfter as e:
-            logger.info("Sleeping %ss on aiogram FloodWait...", e.timeout)
-            await asyncio.sleep(e.timeout)
+        except TelegramRetryAfter as e:
+            logger.info("Sleeping %ss on aiogram FloodWait...", e.retry_after)
+            await asyncio.sleep(e.retry_after)
             return await self._edit_unit(**utils.get_kwargs())
-        except MessageIdInvalid:
+        except TelegramBadRequest:
             with contextlib.suppress(Exception):
                 await query.answer(
                     "I should have edited some message, but it is deleted :("

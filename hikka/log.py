@@ -19,7 +19,7 @@ import typing
 from logging.handlers import RotatingFileHandler
 
 import hikkatl
-from aiogram.utils.exceptions import NetworkError
+from aiogram.exceptions import TelegramNetworkError
 
 from . import utils
 from .tl_cache import CustomTelegramClient
@@ -65,7 +65,7 @@ linecache.getlines = getlines
 
 def override_text(exception: Exception) -> typing.Optional[str]:
     """Returns error-specific description if available, else `None`"""
-    if isinstance(exception, NetworkError):
+    if isinstance(exception, TelegramNetworkError):
         return "✈️ <b>You have problems with internet connection on your server.</b>"
 
     return None
