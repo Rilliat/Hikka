@@ -164,22 +164,18 @@ class InlineManager(
 
         self._dp.inline_query.register(
             self._inline_handler,
-            lambda _: True,
         )
 
         self._dp.callback_query.register(
             self._callback_query_handler,
-            lambda _: True,
         )
 
         self._dp.chosen_inline_result.register(
             self._chosen_inline_handler,
-            lambda _: True,
         )
 
         self._dp.message.register(
             self._message_handler,
-            lambda *_: True,
         )
 
         old = self.bot.get_updates
