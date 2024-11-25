@@ -32,6 +32,7 @@ from aiogram.exceptions import (
     TelegramBadRequest,
     TelegramRetryAfter,
 )
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 from hikkatl.utils import resolve_inline_message_id
 
 from .. import utils
@@ -53,7 +54,7 @@ class Utils(InlineUnit):
         if isinstance(markup_obj, InlineKeyboardMarkup):
             return markup_obj
 
-        markup = InlineKeyboardMarkup()
+        builder = InlineKeyboardBuilder()
 
         map_ = (
             self._units[markup_obj]["buttons"]
@@ -214,9 +215,9 @@ class Utils(InlineUnit):
                     )
                     return False
 
-            markup.row(*line)
+            builder.row(*line, width=3)
 
-        return markup
+        return builder.as_markup()
 
     generate_markup = _generate_markup
 
