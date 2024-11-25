@@ -196,7 +196,14 @@ class InlineQuery(AiogramInlineQuery):
     """Modified version of original Aiogram InlineQuery"""
 
     def __init__(self, inline_query: AiogramInlineQuery):
-        super().__init__()
+        super().__init__(
+            id=inline_query.id,
+            from_user=inline_query.from_user,
+            query=inline_query.query,
+            offset=inline_query.offset,
+            chat_type=inline_query.chat_type,
+            location=inline_query.location
+        )
 
         for attr in {"id", "from_user", "query", "offset", "chat_type", "location"}:
             setattr(self, attr, getattr(inline_query, attr, None))

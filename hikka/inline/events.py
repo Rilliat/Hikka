@@ -61,12 +61,7 @@ class Events(InlineUnit):
             logging.info(inline_query)
             logging.info(dir(inline_query))
             logging.info(inline_query.__dict__)
-            instance = InlineQuery(id=inline_query.id,
-                                   from_user=inline_query.from_user,
-                                   query=inline_query.query,
-                                   offset=inline_query.offset,
-                                   chat_type=inline_query.chat_type,
-                                   location=inline_query.location)
+            instance = InlineQuery(inline_query)
 
             try:
                 if not (
