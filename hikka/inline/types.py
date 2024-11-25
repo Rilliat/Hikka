@@ -197,7 +197,6 @@ class InlineQuery(AiogramInlineQuery):
 
     def __init__(self, inline_query: AiogramInlineQuery):
         super().__init__(
-            id=inline_query.id,
             from_user=inline_query.from_user,
             query=inline_query.query,
             offset=inline_query.offset,
