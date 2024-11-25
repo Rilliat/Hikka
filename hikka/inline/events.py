@@ -58,6 +58,9 @@ class Events(InlineUnit):
             func=self._allmodules.inline_handlers[cmd],
             user=inline_query.from_user.id,
         ):
+            logging.info(inline_query)
+            logging.info(dir(inline_query))
+            logging.info(inline_query.__dict__)
             instance = InlineQuery(inline_query)
 
             try:
