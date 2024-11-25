@@ -470,12 +470,12 @@ class Events(InlineUnit):
                         self.translator.getkey("inline.inline_cmds").format(len(_help))
                     ),
                     input_message_content=InputTextMessageContent(
-                        (
+                        message_text=(
                             self.translator.getkey("inline.inline_cmds_msg").format(
                                 "\n".join(map(lambda x: x[1], _help))
                             )
                         ),
-                        "HTML",
+                        parse_mode="HTML",
                         disable_web_page_preview=True,
                     ),
                     thumb_url=(
