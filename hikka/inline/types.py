@@ -130,7 +130,8 @@ class InlineCall(CallbackQuery, InlineMessage):
         inline_manager: "InlineManager",  # type: ignore  # noqa: F821
         unit_id: str,
     ):
-        super(CallbackQuery, self).__init__()
+        try: super(CallbackQuery, self).__init__()
+        except: pass
 
         for attr in {
             "id",
@@ -145,13 +146,13 @@ class InlineCall(CallbackQuery, InlineMessage):
 
         self.original_call = call
 
-        InlineMessage.__init__(
+        try: InlineMessage.__init__(
             self,
             inline_manager,
             unit_id,
             call.inline_message_id,
         )
-
+        except: pass
 
 class BotInlineCall(CallbackQuery, BotInlineMessage):
     """Modified version of classic aiogram `CallbackQuery`"""
