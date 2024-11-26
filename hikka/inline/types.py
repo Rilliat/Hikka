@@ -265,9 +265,9 @@ class CustomInlineQuery:
                     message_text="😶‍🌫️ <i>There is nothing here...</i>",
                     parse_mode="HTML",
                 ),
-                thumb_url=thumb_url,
-                thumb_width=128,
-                thumb_height=128,
+                thumbnail_url=thumb_url,
+                thumbnail_width=128,
+                thumbnail_height=128,
             )
         ]
 
@@ -354,9 +354,9 @@ class InlineQuery(AiogramInlineQuery):
                     "😶‍🌫️ <i>There is nothing here...</i>",
                     parse_mode="HTML",
                 ),
-                thumb_url=thumb_url,
-                thumb_width=128,
-                thumb_height=128,
+                thumbnail_url=thumb_url,
+                thumbnail_width=128,
+                thumbnail_height=128,
             )
         ]
 

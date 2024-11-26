@@ -144,7 +144,7 @@ class HikkaInfoMod(loader.Module):
         )
 
     @loader.inline_handler(
-        thumb_url="https://img.icons8.com/external-others-inmotus-design/344/external-Moon-round-icons-others-inmotus-design-2.png"
+        thumbnail_url="https://img.icons8.com/external-others-inmotus-design/344/external-Moon-round-icons-others-inmotus-design-2.png"
     )
     @loader.inline_everyone
     async def info(self, _: InlineQuery) -> dict:
