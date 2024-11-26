@@ -162,7 +162,8 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
         inline_manager: "InlineManager",  # type: ignore  # noqa: F821
         unit_id: str,
     ):
-        CallbackQuery.__init__(self)
+        try: CallbackQuery.__init__(self)
+        except: pass
 
         for attr in {
             "id",
@@ -177,13 +178,14 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
 
         self.original_call = call
 
-        BotInlineMessage.__init__(
+        try: BotInlineMessage.__init__(
             self,
             inline_manager,
             unit_id,
             call.message.chat.id,
             call.message.message_id,
         )
+        except: pass
 
 
 class InlineUnit:
