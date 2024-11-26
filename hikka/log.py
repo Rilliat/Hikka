@@ -361,24 +361,7 @@ class TelegramLogsHandler(logging.Handler):
 
             self._exc_queue = {
                 client_id: [
-                    _workaround(
-                        self._mods[client_id].logchat,
-                        item[0].message,
-                        reply_markup=self._mods[client_id].inline.generate_markup(
-                            [
-                                {
-                                    "text": "🪐 Full traceback",
-                                    "callback": self._show_full_trace,
-                                    "args": (
-                                        self._mods[client_id].inline.bot,
-                                        item[0],
-                                    ),
-                                    "disable_security": True,
-                                },
-                                *self._gen_web_debug_button(item[0]),
-                            ],
-                        ),
-                    )
+                    item
                     for item in self.tg_buff
                     if isinstance(item[0], HikkaException)
                     and (not item[1] or item[1] == client_id or self.force_send_all)
@@ -388,7 +371,24 @@ class TelegramLogsHandler(logging.Handler):
 
             for client_id, exceptions in self._exc_queue.items():
                 for exc in exceptions:
-                    await self._mods[client_id].inline.bot.send_message(**exc)
+                    await self._mods[client_id].inline.bot.send_message(
+                        self._mods[client_id].logchat,
+                        exc[0].message,
+                        reply_markup=self._mods[client_id].inline.generate_markup(
+                            [
+                                {
+                                    "text": "🪐 Full traceback",
+                                    "callback": self._show_full_trace,
+                                    "args": (
+                                        self._mods[client_id].inline.bot,
+                                        exc[0],
+                                    ),
+                                    "disable_security": True,
+                                },
+                                *self._gen_web_debug_button(exc[0]),
+                            ],
+                        ),
+                    )
 
             self.tg_buff = []
 
