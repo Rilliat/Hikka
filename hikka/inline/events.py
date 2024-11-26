@@ -447,8 +447,8 @@ class Events(InlineUnit):
                         title=self.translator.getkey("inline.show_inline_cmds"),
                         description=self.translator.getkey("inline.no_inline_cmds"),
                         input_message_content=InputTextMessageContent(
-                            self.translator.getkey("inline.no_inline_cmds_msg"),
-                            "HTML",
+                            message_text=self.translator.getkey("inline.no_inline_cmds_msg"),
+                            parse_mode="HTML",
                             disable_web_page_preview=True,
                         ),
                         thumbnail_url=(
