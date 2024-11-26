@@ -5,11 +5,19 @@
 # 🔑 https://www.gnu.org/licenses/agpl-3.0.html
 
 import logging
+from typing import Any, Optional, Union
 
-from aiogram.types import CallbackQuery
+from aiogram import Bot
+from aiogram.types import CallbackQuery, InlineQueryResultsButton, InlineQueryResultVoice, InlineQueryResultVideo, \
+    InlineQueryResultVenue, InlineQueryResultPhoto, InlineQueryResultMpeg4Gif, InlineQueryResultLocation, \
+    InlineQueryResultGif, InlineQueryResultDocument, InlineQueryResultContact, InlineQueryResultAudio, \
+    InlineQueryResultGame, InlineQueryResultCachedVoice, InlineQueryResultCachedAudio, InlineQueryResultCachedDocument, \
+    InlineQueryResultCachedGif, InlineQueryResultCachedMpeg4Gif, InlineQueryResultCachedPhoto, \
+    InlineQueryResultCachedSticker, InlineQueryResultCachedVideo
 from aiogram.types import InlineQuery as AiogramInlineQuery
 from aiogram.types import InlineQueryResultArticle, InputTextMessageContent
 from aiogram.types import Message as AiogramMessage
+from aiogram.methods import AnswerInlineQuery
 
 from .. import utils
 
@@ -192,11 +200,138 @@ class BotMessage(AiogramMessage):
         super().__init__()
 
 
+class CustomInlineQuery:
+    def __init__(self, inline_query: AiogramInlineQuery, bot: "Bot"):
+        self.inline_query = inline_query
+        self._bot = bot
+
+    def answer(
+            self,
+            inline_query_id: str,
+            results: list[
+                Union[
+                    InlineQueryResultCachedAudio,
+                    InlineQueryResultCachedDocument,
+                    InlineQueryResultCachedGif,
+                    InlineQueryResultCachedMpeg4Gif,
+                    InlineQueryResultCachedPhoto,
+                    InlineQueryResultCachedSticker,
+                    InlineQueryResultCachedVideo,
+                    InlineQueryResultCachedVoice,
+                    InlineQueryResultArticle,
+                    InlineQueryResultAudio,
+                    InlineQueryResultContact,
+                    InlineQueryResultGame,
+                    InlineQueryResultDocument,
+                    InlineQueryResultGif,
+                    InlineQueryResultLocation,
+                    InlineQueryResultMpeg4Gif,
+                    InlineQueryResultPhoto,
+                    InlineQueryResultVenue,
+                    InlineQueryResultVideo,
+                    InlineQueryResultVoice,
+                ]
+            ],
+            cache_time: Optional[int] = None,
+            is_personal: Optional[bool] = None,
+            next_offset: Optional[str] = None,
+            button: Optional[InlineQueryResultsButton] = None,
+            switch_pm_parameter: Optional[str] = None,
+            switch_pm_text: Optional[str] = None,
+            **kwargs: Any,
+    ) -> AnswerInlineQuery:
+        from aiogram.methods import AnswerInlineQuery
+
+        return AnswerInlineQuery(
+            inline_query_id=inline_query_id,
+            results=results,
+            cache_time=cache_time,
+            is_personal=is_personal,
+            next_offset=next_offset,
+            button=button,
+            switch_pm_parameter=switch_pm_parameter,
+            switch_pm_text=switch_pm_text,
+            **kwargs,
+        ).as_(self._bot)
+
+    @staticmethod
+    def _get_res(title: str, description: str, thumb_url: str) -> list:
+        return [
+            InlineQueryResultArticle(
+                id=utils.rand(20),
+                title=title,
+                description=description,
+                input_message_content=InputTextMessageContent(
+                    message_text="😶‍🌫️ <i>There is nothing here...</i>",
+                    parse_mode="HTML",
+                ),
+                thumb_url=thumb_url,
+                thumb_width=128,
+                thumb_height=128,
+            )
+        ]
+
+    async def e400(self):
+        await self.answer(
+            self._get_res(
+                "🚫 400",
+                (
+                    "Bad request. You need to pass right arguments, follow module's"
+                    " documentation"
+                ),
+                "https://img.icons8.com/color/344/swearing-male--v1.png",
+            ),
+            cache_time=0,
+        )
+
+    async def e403(self):
+        await self.answer(
+            self._get_res(
+                "🚫 403",
+                "You have no permissions to access this result",
+                "https://img.icons8.com/external-wanicon-flat-wanicon/344/external-forbidden-new-normal-wanicon-flat-wanicon.png",
+            ),
+            cache_time=0,
+        )
+
+    async def e404(self):
+        await self.answer(
+            self._get_res(
+                "🚫 404",
+                "No results found",
+                "https://img.icons8.com/external-justicon-flat-justicon/344/external-404-error-responsive-web-design-justicon-flat-justicon.png",
+            ),
+            cache_time=0,
+        )
+
+    async def e426(self):
+        await self.answer(
+            self._get_res(
+                "🚫 426",
+                "You need to update Hikka before sending this request",
+                "https://img.icons8.com/fluency/344/approve-and-update.png",
+            ),
+            cache_time=0,
+        )
+
+    async def e500(self):
+        await self.answer(
+            self._get_res(
+                "🚫 500",
+                "Internal userbot error while processing request. More info in logs",
+                "https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/344/external-error-internet-security-vitaliy-gorbachev-flat-vitaly-gorbachev.png",
+            ),
+            cache_time=0,
+        )
+
+
+
+
 class InlineQuery(AiogramInlineQuery):
     """Modified version of original Aiogram InlineQuery"""
 
     def __init__(self, inline_query: AiogramInlineQuery):
-        # super().__init__()
+        super().__init__()
 
         for attr in {"id", "from_user", "query", "offset", "chat_type", "location"}:
             setattr(self, attr, getattr(inline_query, attr, None))

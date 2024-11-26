@@ -23,7 +23,7 @@ from aiogram.types import (
 from aiogram.types import Message as AiogramMessage
 
 from .. import utils
-from .types import BotInlineCall, InlineCall, InlineQuery, InlineUnit
+from .types import BotInlineCall, InlineCall, InlineQuery, InlineUnit, CustomInlineQuery
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +58,8 @@ class Events(InlineUnit):
             func=self._allmodules.inline_handlers[cmd],
             user=inline_query.from_user.id,
         ):
-            instance = InlineQuery(inline_query)
+            instance = inline_query
+            kostyl = CustomInlineQuery(instance, instance.bot)
 
             try:
                 if not (
@@ -77,7 +78,7 @@ class Events(InlineUnit):
                     "Got invalid type from inline handler. It must be `dict`, got `%s`",
                     type(result),
                 )
-                await instance.e500()
+                await kostyl.e500()
                 return
 
             for res in result:
@@ -90,7 +91,7 @@ class Events(InlineUnit):
                         ),
                         mandatory,
                     )
-                    await instance.e500()
+                    await kostyl.e500()
                     return
 
                 if "file" in res and "mime_type" not in res:
