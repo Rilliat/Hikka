@@ -185,7 +185,7 @@ class FHeta(loader.Module):
                     continue
                 seen_modules.add(module_key)
 
-                thumb_url = module.get("banner", None)
+                thumbnail_url = module.get("banner", None)
                 result = self.strings["result"].format(
                     index=result_index,
                     query=args,
@@ -196,16 +196,16 @@ class FHeta(loader.Module):
                     description=description_section,
                     commands=commands_section + inline_commands_section
                 )
-                formatted_modules.append((result, thumb_url))
+                formatted_modules.append((result, thumbnail_url))
                 result_index += 1
             except Exception:
                 continue
 
         if len(formatted_modules) == 1:
-            result_text, thumb_url = formatted_modules[0]
-            if thumb_url:
+            result_text, thumbnail_url = formatted_modules[0]
+            if thumbnail_url:
                 async with aiohttp.ClientSession() as session:
-                    async with session.get(thumb_url) as response:
+                    async with session.get(thumbnail_url) as response:
                         if response.status == 200:
                             banner_data = await response.read()
                             file = io.BytesIO(banner_data)

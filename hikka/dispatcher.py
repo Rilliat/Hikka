@@ -88,7 +88,7 @@ ALL_TAGS = [
     "filter",
     "from_id",
     "chat_id",
-    "thumb_url",
+    "thumbnail_url",
     "alias",
     "aliases",
 ]

@@ -255,7 +255,7 @@ class CustomInlineQuery:
         ).as_(self._bot)
 
     @staticmethod
-    def _get_res(title: str, description: str, thumb_url: str) -> list:
+    def _get_res(title: str, description: str, thumbnail_url: str) -> list:
         return [
             InlineQueryResultArticle(
                 id=utils.rand(20),
@@ -265,7 +265,7 @@ class CustomInlineQuery:
                     message_text="😶‍🌫️ <i>There is nothing here...</i>",
                     parse_mode="HTML",
                 ),
-                thumbnail_url=thumb_url,
+                thumbnail_url=thumbnail_url,
                 thumbnail_width=128,
                 thumbnail_height=128,
             )
@@ -344,7 +344,7 @@ class InlineQuery(AiogramInlineQuery):
         )
 
     @staticmethod
-    def _get_res(title: str, description: str, thumb_url: str) -> list:
+    def _get_res(title: str, description: str, thumbnail_url: str) -> list:
         return [
             InlineQueryResultArticle(
                 id=utils.rand(20),
@@ -354,7 +354,7 @@ class InlineQuery(AiogramInlineQuery):
                     "😶‍🌫️ <i>There is nothing here...</i>",
                     parse_mode="HTML",
                 ),
-                thumbnail_url=thumb_url,
+                thumbnail_url=thumbnail_url,
                 thumbnail_width=128,
                 thumbnail_height=128,
             )

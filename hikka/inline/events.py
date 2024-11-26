@@ -400,7 +400,7 @@ class Events(InlineUnit):
                 doc = "🦥 No docs"
 
             try:
-                thumb = getattr(fun, "thumb_url", None) or fun.__self__.hikka_meta_pic
+                thumb = getattr(fun, "thumbnail_url", None) or fun.__self__.hikka_meta_pic
             except Exception:
                 thumb = None
 
