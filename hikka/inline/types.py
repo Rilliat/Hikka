@@ -145,16 +145,14 @@ class InlineCall(CallbackQuery, InlineMessage):
             try: setattr(self, attr, getattr(call, attr, None))
             except: pass
 
-        try: self.original_call = call
-        except: pass
+        self.original_call = call
 
-        try: InlineMessage.__init__(
+        InlineMessage.__init__(
             self,
             inline_manager,
             unit_id,
             call.inline_message_id,
         )
-        except: pass
 
 class BotInlineCall(CallbackQuery, BotInlineMessage):
     """Modified version of classic aiogram `CallbackQuery`"""
