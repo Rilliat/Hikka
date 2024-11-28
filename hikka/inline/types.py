@@ -124,7 +124,7 @@ class BotInlineMessage:
 
 class InlineCall(CallbackQuery, InlineMessage):
     """Modified version of classic aiogram `CallbackQuery`"""
-    model_config = ConfigDict(frozen=True),
+    model_config = ConfigDict(frozen=False),
 
     def __init__(
         self,
@@ -158,7 +158,7 @@ class InlineCall(CallbackQuery, InlineMessage):
 
 class BotInlineCall(CallbackQuery, BotInlineMessage):
     """Modified version of classic aiogram `CallbackQuery`"""
-    model_config = ConfigDict(frozen=True),
+    model_config = ConfigDict(frozen=False),
 
     def __init__(
         self,
