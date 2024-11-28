@@ -19,6 +19,7 @@ from aiogram.types import InlineQueryResultArticle, InputTextMessageContent
 from aiogram.types import Message as AiogramMessage
 from aiogram.methods import AnswerInlineQuery
 from pydantic import ConfigDict
+from pydantic._internal import _model_construction
 
 from .. import utils
 
@@ -133,6 +134,8 @@ class InlineCall(CallbackQuery, InlineMessage):
         arbitrary_types_allowed=True,
         defer_build=True,
     )
+    __pydantic_extra__: dict[str, Any] | None = _model_construction.NoInitField(init=False)
+
     def __init__(
         self,
         call: CallbackQuery,
@@ -174,6 +177,8 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
         arbitrary_types_allowed=True,
         defer_build=True,
     )
+    __pydantic_extra__: dict[str, Any] | None = _model_construction.NoInitField(init=False)
+
     def __init__(
         self,
         call: CallbackQuery,
