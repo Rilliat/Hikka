@@ -142,8 +142,7 @@ class InlineCall(CallbackQuery, InlineMessage):
         inline_manager: "InlineManager",  # type: ignore  # noqa: F821
         unit_id: str,
     ):
-        try: super(CallbackQuery, self).__init__()
-        except: pass
+        super(CallbackQuery, self).__init__()
 
         for attr in {
             "id",
@@ -154,8 +153,7 @@ class InlineCall(CallbackQuery, InlineMessage):
             "data",
             "game_short_name",
         }:
-            try: setattr(self, attr, getattr(call, attr, None))
-            except: pass
+            setattr(self, attr, getattr(call, attr, None))
 
         InlineMessage.__init__(
             self,
@@ -183,8 +181,7 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
         inline_manager: "InlineManager",  # type: ignore  # noqa: F821
         unit_id: str,
     ):
-        try: CallbackQuery.__init__(self)
-        except: pass
+        CallbackQuery.__init__(self)
 
         for attr in {
             "id",
@@ -195,8 +192,7 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
             "data",
             "game_short_name",
         }:
-            try: setattr(self, attr, getattr(call, attr, None))
-            except: pass
+            setattr(self, attr, getattr(call, attr, None))
 
         BotInlineMessage.__init__(
             self,
