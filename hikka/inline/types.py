@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 
 class InlineMessage:
     """Aiogram message, sent via inline bot"""
+    model_config = ConfigDict({'frozen': True}),
 
     def __init__(
         self,
@@ -68,7 +69,7 @@ class InlineMessage:
 
 class BotInlineMessage:
     """Aiogram message, sent through inline bot itself"""
-    model_config = ConfigDict(frozen=True),
+    model_config = ConfigDict({'frozen': True}),
 
     def __init__(
         self,
@@ -125,7 +126,7 @@ class BotInlineMessage:
 
 class InlineCall(CallbackQuery, InlineMessage):
     """Modified version of classic aiogram `CallbackQuery`"""
-    model_config = ConfigDict(frozen=True),
+    model_config = ConfigDict({'frozen': True}),
 
     def __init__(
         self,
@@ -159,7 +160,7 @@ class InlineCall(CallbackQuery, InlineMessage):
 
 class BotInlineCall(CallbackQuery, BotInlineMessage):
     """Modified version of classic aiogram `CallbackQuery`"""
-    model_config = ConfigDict(frozen=True),
+    model_config = ConfigDict({'frozen': True}),
 
     def __init__(
         self,
