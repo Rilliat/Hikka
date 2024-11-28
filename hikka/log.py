@@ -356,8 +356,6 @@ class TelegramLogsHandler(logging.Handler):
                 )
                 for client_id in self._mods
             }
-            def _workaround(*args):
-                return args
 
             self._exc_queue = {
                 client_id: [
