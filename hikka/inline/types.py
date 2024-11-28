@@ -68,6 +68,7 @@ class InlineMessage:
 
 class BotInlineMessage:
     """Aiogram message, sent through inline bot itself"""
+    model_config = ConfigDict(frozen=True),
 
     def __init__(
         self,
@@ -75,7 +76,6 @@ class BotInlineMessage:
         unit_id: str,
         chat_id: int,
         message_id: int,
-        model_config=ConfigDict(frozen=True),
     ):
         self.chat_id = chat_id
         self.unit_id = unit_id
@@ -125,14 +125,13 @@ class BotInlineMessage:
 
 class InlineCall(CallbackQuery, InlineMessage):
     """Modified version of classic aiogram `CallbackQuery`"""
+    model_config = ConfigDict(frozen=True),
 
     def __init__(
         self,
         call: CallbackQuery,
         inline_manager: "InlineManager",  # type: ignore  # noqa: F821
         unit_id: str,
-
-        model_config=ConfigDict(frozen=True),
     ):
         try: super(CallbackQuery, self).__init__()
         except: pass
@@ -160,14 +159,13 @@ class InlineCall(CallbackQuery, InlineMessage):
 
 class BotInlineCall(CallbackQuery, BotInlineMessage):
     """Modified version of classic aiogram `CallbackQuery`"""
+    model_config = ConfigDict(frozen=True),
 
     def __init__(
         self,
         call: CallbackQuery,
         inline_manager: "InlineManager",  # type: ignore  # noqa: F821
         unit_id: str,
-
-        model_config=ConfigDict(frozen=True),
     ):
         try: CallbackQuery.__init__(self)
         except: pass
