@@ -126,7 +126,7 @@ class InlineCall(CallbackQuery, InlineMessage):
     """Modified version of classic aiogram `CallbackQuery`"""
     model_config = ConfigDict(
         use_enum_values=True,
-        extra="allow",
+        extra="ignore",
         validate_assignment=True,
         frozen=False,
         populate_by_name=True,
@@ -167,7 +167,7 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
     """Modified version of classic aiogram `CallbackQuery`"""
     model_config = ConfigDict(
         use_enum_values=True,
-        extra="allow",
+        extra="ignore",
         validate_assignment=True,
         frozen=False,
         populate_by_name=True,
