@@ -157,8 +157,6 @@ class InlineCall(CallbackQuery, InlineMessage):
             try: setattr(self, attr, getattr(call, attr, None))
             except: pass
 
-        self.original_call = call
-
         InlineMessage.__init__(
             self,
             inline_manager,
@@ -200,17 +198,13 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
             try: setattr(self, attr, getattr(call, attr, None))
             except: pass
 
-        try: self.original_call = call
-        except: pass
-
-        try: BotInlineMessage.__init__(
+        BotInlineMessage.__init__(
             self,
             inline_manager,
             unit_id,
             call.message.chat.id,
             call.message.message_id,
         )
-        except: pass
 
 
 class InlineUnit:
