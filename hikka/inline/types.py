@@ -142,7 +142,7 @@ class InlineCall(CallbackQuery, InlineMessage):
         inline_manager: "InlineManager",  # type: ignore  # noqa: F821
         unit_id: str,
     ):
-        super(CallbackQuery, self).__init__()
+        CallbackQuery.__init__(self)
 
         for attr in {
             "id",
