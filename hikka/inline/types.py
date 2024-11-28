@@ -18,6 +18,7 @@ from aiogram.types import InlineQuery as AiogramInlineQuery
 from aiogram.types import InlineQueryResultArticle, InputTextMessageContent
 from aiogram.types import Message as AiogramMessage
 from aiogram.methods import AnswerInlineQuery
+from pydantic import ConfigDict
 
 from .. import utils
 
@@ -74,6 +75,7 @@ class BotInlineMessage:
         unit_id: str,
         chat_id: int,
         message_id: int,
+        model_config=ConfigDict(frozen=True),
     ):
         self.chat_id = chat_id
         self.unit_id = unit_id
@@ -129,6 +131,8 @@ class InlineCall(CallbackQuery, InlineMessage):
         call: CallbackQuery,
         inline_manager: "InlineManager",  # type: ignore  # noqa: F821
         unit_id: str,
+
+        model_config=ConfigDict(frozen=True),
     ):
         try: super(CallbackQuery, self).__init__()
         except: pass
@@ -162,6 +166,8 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
         call: CallbackQuery,
         inline_manager: "InlineManager",  # type: ignore  # noqa: F821
         unit_id: str,
+
+        model_config=ConfigDict(frozen=True),
     ):
         try: CallbackQuery.__init__(self)
         except: pass
