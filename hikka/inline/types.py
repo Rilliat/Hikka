@@ -137,11 +137,14 @@ class InlineCall(CallbackQuery, InlineMessage):
         defer_build=True,
     )
     __pydantic_extra__: dict[str, Any] | None = _model_construction.NoInitField(init=False)
+    chat_id: Optional[int] = Field(None)
+    unit_id: Optional[str] = Field(None)
+    inline_manager: Optional[Any] = Field(None) # type: ignore  # noqa: F821
 
     def __init__(
         self,
         call: CallbackQuery,
-        inline_manager: "InlineManager",  # type: ignore  # noqa: F821
+        inline_manager: Any,  # type: ignore  # noqa: F821
         unit_id: str,
     ):
         CallbackQuery.__init__(
@@ -158,6 +161,7 @@ class InlineCall(CallbackQuery, InlineMessage):
         for attr in {
             "id",
             "from_user",
+            "chat_instance",
             "message",
             "inline_message_id",
             "chat_instance",
@@ -165,6 +169,7 @@ class InlineCall(CallbackQuery, InlineMessage):
             "game_short_name",
         }:
             setattr(self, attr, getattr(call, attr, None))
+        setattr(self, "chat_id", getattr(call.message.chat, "id", None))
 
         InlineMessage.__init__(
             self,
