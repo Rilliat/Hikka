@@ -211,6 +211,7 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
             "game_short_name",
         }:
             setattr(self, attr, getattr(call, attr, None))
+        logger.info(call.message.chat.id)
         setattr(self, "chat_id", getattr(call.message.chat, "id", None))
 
         BotInlineMessage.__init__(
