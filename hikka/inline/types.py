@@ -184,6 +184,7 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
     )
     __pydantic_extra__: dict[str, Any] | None = _model_construction.NoInitField(init=False)
     chat_id: Optional[int] = Field(None)
+    unit_id: Optional[str] = Field(None)
 
     def __init__(
         self,
