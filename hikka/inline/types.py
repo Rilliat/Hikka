@@ -74,10 +74,10 @@ class BotInlineMessage:
         self,
         inline_manager: "InlineManager",  # type: ignore  # noqa: F821
         unit_id: str,
-        chat_id: int,
+        chat_instance: str,
         message_id: int,
     ):
-        self.chat_id = chat_id
+        self.chat_id = int(chat_instance)
         self.unit_id = unit_id
         self.inline_manager = inline_manager
         self.message_id = message_id
@@ -216,7 +216,7 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
             self,
             inline_manager,
             unit_id,
-            call.message.chat.id,
+            call.chat_instance,
             call.message.message_id,
         )
 
