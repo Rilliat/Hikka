@@ -143,6 +143,7 @@ class InlineCall(CallbackQuery, InlineMessage):
         unit_id: str,
     ):
         CallbackQuery.__init__(
+            self,
             id=call.id,
             from_user=call.from_user,
             chat_instance=call.chat_instance,
@@ -190,6 +191,7 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
         unit_id: str,
     ):
         CallbackQuery.__init__(
+            self,
             id=call.id,
             from_user=call.from_user,
             chat_instance=call.chat_instance,
