@@ -192,7 +192,7 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
     def __init__(
         self,
         call: CallbackQuery,
-        inline_manager: "InlineManager",  # type: ignore  # noqa: F821
+        inline_manager: "InlineManager" | Any,  # type: ignore  # noqa: F821
         unit_id: str,
     ):
         self.model_rebuild(raise_errors=False)
