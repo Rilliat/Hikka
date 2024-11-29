@@ -188,6 +188,7 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
     chat_id: Optional[int] = Field(None)
     unit_id: Optional[str] = Field(None)
     inline_manager: Optional[Any] = Field(None) # type: ignore  # noqa: F821
+    message_id: Optional[int] = Field(None)
 
     def __init__(
         self,
