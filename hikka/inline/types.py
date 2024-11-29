@@ -4,6 +4,8 @@
 # You can redistribute it and/or modify it under the terms of the GNU AGPLv3
 # 🔑 https://www.gnu.org/licenses/agpl-3.0.html
 
+from __future__ import annotations  # Я В РОТ ЕБАЛ ЭТУ ХУЙНЮ
+
 import logging
 from typing import Any, Optional, Union
 
