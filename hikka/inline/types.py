@@ -74,10 +74,10 @@ class BotInlineMessage:
         self,
         inline_manager: "InlineManager",  # type: ignore  # noqa: F821
         unit_id: str,
-        chat_instance: str,
+        chat_id: int,
         message_id: int,
     ):
-        self.chat_id = int(chat_instance)
+        self.chat_id = chat_id
         self.unit_id = unit_id
         self.inline_manager = inline_manager
         self.message_id = message_id
@@ -211,12 +211,13 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
             "game_short_name",
         }:
             setattr(self, attr, getattr(call, attr, None))
+        setattr(self, "chat_id", getattr(call.message.chat, "id", None))
 
         BotInlineMessage.__init__(
             self,
             inline_manager,
             unit_id,
-            call.chat_instance,
+            call.message.chat.id,
             call.message.message_id,
         )
 
