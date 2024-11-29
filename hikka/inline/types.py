@@ -169,7 +169,7 @@ class InlineCall(CallbackQuery, InlineMessage):
             "game_short_name",
         }:
             setattr(self, attr, getattr(call, attr, None))
-        logger.info(call.message + call.message.chat)
+        logger.info(call.message)
         setattr(self, "chat_id", getattr(call.message.chat, "id", None))
 
         InlineMessage.__init__(
