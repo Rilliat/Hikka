@@ -141,7 +141,7 @@ class InlineCall(CallbackQuery, InlineMessage):
         call: CallbackQuery,
         inline_manager: "InlineManager",  # type: ignore  # noqa: F821
         unit_id: str,
-        __pydantic_kwargs=Any):
+    ):
         CallbackQuery.__init__(
             id=call.id,
             from_user=call.from_user,
@@ -150,7 +150,6 @@ class InlineCall(CallbackQuery, InlineMessage):
             inline_message_id=call.inline_message_id,
             data=call.data,
             game_short_name=call.game_short_name,
-            **__pydantic_kwargs,
         )
 
         for attr in {
@@ -189,16 +188,15 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
         call: CallbackQuery,
         inline_manager: "InlineManager",  # type: ignore  # noqa: F821
         unit_id: str,
-        __pydantic_kwargs=Any):
+    ):
         CallbackQuery.__init__(
-                id=call.id,
-                from_user=call.from_user,
-                chat_instance=call.chat_instance,
-                message=call.message,
-                inline_message_id=call.inline_message_id,
-                data=call.data,
-                game_short_name=call.game_short_name,
-                **__pydantic_kwargs,
+            id=call.id,
+            from_user=call.from_user,
+            chat_instance=call.chat_instance,
+            message=call.message,
+            inline_message_id=call.inline_message_id,
+            data=call.data,
+            game_short_name=call.game_short_name,
             )
 
         for attr in {
