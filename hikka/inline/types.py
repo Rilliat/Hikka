@@ -204,9 +204,9 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
         for attr in {
             "id",
             "from_user",
-            "message",
-            "chat",
             "chat_instance",
+            "message",
+            "inline_message_id",
             "data",
             "game_short_name",
         }:
