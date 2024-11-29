@@ -18,7 +18,7 @@ from aiogram.types import InlineQuery as AiogramInlineQuery
 from aiogram.types import InlineQueryResultArticle, InputTextMessageContent
 from aiogram.types import Message as AiogramMessage
 from aiogram.methods import AnswerInlineQuery
-from pydantic import ConfigDict
+from pydantic import ConfigDict, Field
 from pydantic._internal import _model_construction
 
 from .. import utils
@@ -183,6 +183,7 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
         defer_build=True,
     )
     __pydantic_extra__: dict[str, Any] | None = _model_construction.NoInitField(init=False)
+    chat_id: Optional[int] = Field(None)
 
     def __init__(
         self,
@@ -211,7 +212,6 @@ class BotInlineCall(CallbackQuery, BotInlineMessage):
             "game_short_name",
         }:
             setattr(self, attr, getattr(call, attr, None))
-        logger.info(call.message.chat.id)
         setattr(self, "chat_id", getattr(call.message.chat, "id", None))
 
         BotInlineMessage.__init__(
