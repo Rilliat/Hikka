@@ -137,7 +137,6 @@ class InlineCall(CallbackQuery, InlineMessage):
         defer_build=True,
     )
     __pydantic_extra__: dict[str, Any] | None = _model_construction.NoInitField(init=False)
-    chat_id: Optional[int] = Field(None)
     unit_id: Optional[str] = Field(None)
     inline_manager: Optional[Any] = Field(None) # type: ignore  # noqa: F821
 
@@ -170,7 +169,6 @@ class InlineCall(CallbackQuery, InlineMessage):
         }:
             setattr(self, attr, getattr(call, attr, None))
         logger.info(call.message)
-        setattr(self, "chat_id", getattr(call.message.chat, "id", None))
 
         InlineMessage.__init__(
             self,
