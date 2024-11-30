@@ -143,11 +143,11 @@ class InlineCall(CallbackQuery, InlineMessage):
 
     def __init__(
         self,
-        call: CallbackQuery,
+        call: CallbackQuery | Any,
         inline_manager: Any,
         unit_id: str,
     ):
-        CallbackQuery.__init__(
+        try: CallbackQuery.__init__(
             self,
             id=call.id,
             from_user=call.from_user,
@@ -157,6 +157,7 @@ class InlineCall(CallbackQuery, InlineMessage):
             data=call.data,
             game_short_name=call.game_short_name,
         )
+        except: pass
 
         for attr in {
             "id",
@@ -169,7 +170,6 @@ class InlineCall(CallbackQuery, InlineMessage):
             "game_short_name",
         }:
             setattr(self, attr, getattr(call, attr, None))
-        logger.info(call.message)
 
         InlineMessage.__init__(
             self,
