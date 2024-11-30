@@ -169,7 +169,8 @@ class InlineCall(CallbackQuery, InlineMessage):
             "data",
             "game_short_name",
         }:
-            setattr(self, attr, getattr(call, attr, None))
+            try: setattr(self, attr, getattr(call, attr, None))
+            except: pass
 
         InlineMessage.__init__(
             self,
