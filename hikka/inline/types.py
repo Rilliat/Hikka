@@ -138,6 +138,7 @@ class InlineCall(CallbackQuery, InlineMessage):
         defer_build=True,
     )
     __pydantic_extra__: dict[str, Any] | None = _model_construction.NoInitField(init=False)
+    __pydantic_private__: dict[str, Any] | None = _model_construction.NoInitField(init=False)
     unit_id: Optional[str] = Field(None)
     inline_manager: Optional[Any] = Field(None)
 
