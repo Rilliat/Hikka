@@ -30,6 +30,7 @@ logger = logging.getLogger(__name__)
 
 class InlineMessage:
     """Aiogram message, sent via inline bot"""
+    form: Optional[Any] = Field(None)
 
     def __init__(
         self,
@@ -138,12 +139,12 @@ class InlineCall(CallbackQuery, InlineMessage):
     )
     __pydantic_extra__: dict[str, Any] | None = _model_construction.NoInitField(init=False)
     unit_id: Optional[str] = Field(None)
-    inline_manager: Optional[Any] = Field(None) # type: ignore  # noqa: F821
+    inline_manager: Optional[Any] = Field(None)
 
     def __init__(
         self,
         call: CallbackQuery,
-        inline_manager: Any,  # type: ignore  # noqa: F821
+        inline_manager: Any,
         unit_id: str,
     ):
         CallbackQuery.__init__(
