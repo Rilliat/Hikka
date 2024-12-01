@@ -301,7 +301,7 @@ class TelegramLogsHandler(logging.Handler):
                 else {
                     "text": "🪲 Start debugger",
                     "callback": self._start_debugger,
-                    "args": (item,),
+                    "args": (item, self._mods[0].inline.bot,),
                 }
             )
         ]
@@ -310,6 +310,7 @@ class TelegramLogsHandler(logging.Handler):
         self,
         call: "InlineCall",  # type: ignore  # noqa: F821
         item: HikkaException,
+        bot: "aiogram.Bot",
     ):
         if not self.web_debugger:
             self.web_debugger = WebDebugger()
@@ -323,6 +324,7 @@ class TelegramLogsHandler(logging.Handler):
             reply_markup=self._gen_web_debug_button(item),
         )
 
+        call.answer.as_(bot)
         await call.answer(
             (
                 "Web debugger started. You can get PIN using .debugger command. \n⚠️"
