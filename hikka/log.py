@@ -18,6 +18,7 @@ import traceback
 import typing
 from logging.handlers import RotatingFileHandler
 
+from aiogram import Bot
 import hikkatl
 from aiogram.exceptions import TelegramNetworkError
 
@@ -310,7 +311,7 @@ class TelegramLogsHandler(logging.Handler):
         self,
         call: "InlineCall",  # type: ignore  # noqa: F821
         item: HikkaException,
-        bot: "aiogram.Bot",
+        bot: Bot,
     ):
         if not self.web_debugger:
             self.web_debugger = WebDebugger()
@@ -324,8 +325,8 @@ class TelegramLogsHandler(logging.Handler):
             reply_markup=self._gen_web_debug_button(item),
         )
 
-        call.answer.as_(bot)
-        await call.answer(
+        await bot.answer_callback_query(
+            call.id,
             (
                 "Web debugger started. You can get PIN using .debugger command. \n⚠️"
                 " !DO NOT GIVE IT TO ANYONE! ⚠️"
