@@ -360,21 +360,42 @@ class TelegramLogsHandler(logging.Handler):
                 for client_id in self._mods
             }
 
+            # self._exc_queue = {
+            #     client_id: [
+            #         item
+            #         for item in self.tg_buff
+            #         if isinstance(item[0], HikkaException)
+            #         and (not item[1] or item[1] == client_id or self.force_send_all)
+            #     ]
+            #     for client_id in self._mods
+            # }
+            #
+            # for client_id, exceptions in self._exc_queue.items():
+            #     for exc in exceptions:
+            #         await self._mods[client_id].inline.bot.send_message(
+            #             self._mods[client_id].logchat,
+            #             exc[0].message,
+            #             reply_markup=self._mods[client_id].inline.generate_markup(
+            #                 [
+            #                     {
+            #                         "text": "🪐 Full traceback",
+            #                         "callback": self._show_full_trace,
+            #                         "args": (
+            #                             self._mods[client_id].inline.bot,
+            #                             exc[0],
+            #                         ),
+            #                         "disable_security": True,
+            #                     },
+            #                     *self._gen_web_debug_button(exc[0]),
+            #                 ],
+            #             ),
+            #         )
+
             self._exc_queue = {
                 client_id: [
-                    item
-                    for item in self.tg_buff
-                    if isinstance(item[0], HikkaException)
-                    and (not item[1] or item[1] == client_id or self.force_send_all)
-                ]
-                for client_id in self._mods
-            }
-
-            for client_id, exceptions in self._exc_queue.items():
-                for exc in exceptions:
-                    await self._mods[client_id].inline.bot.send_message(
+                    self._mods[client_id].inline.bot.send_message(
                         self._mods[client_id].logchat,
-                        exc[0].message,
+                        item[0].message,
                         reply_markup=self._mods[client_id].inline.generate_markup(
                             [
                                 {
@@ -382,14 +403,25 @@ class TelegramLogsHandler(logging.Handler):
                                     "callback": self._show_full_trace,
                                     "args": (
                                         self._mods[client_id].inline.bot,
-                                        exc[0],
+                                        item[0],
                                     ),
                                     "disable_security": True,
                                 },
-                                *self._gen_web_debug_button(exc[0]),
+                                *self._gen_web_debug_button(item[0]),
                             ],
                         ),
                     )
+                    for item in self.tg_buff
+                    if isinstance(item[0], HikkaException)
+                    and (not item[1] or item[1] == client_id or self.force_send_all)
+                ]
+                for client_id in self._mods
+            }
+
+            for exceptions in self._exc_queue.values():
+                for exc in exceptions:
+                    await exc
+
 
             self.tg_buff = []
 
