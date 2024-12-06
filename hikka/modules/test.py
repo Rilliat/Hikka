@@ -393,7 +393,7 @@ class TestMod(loader.Module):
 
         self.logchat = int(f"-100{chat.id}")
 
-        logging.getLogger().handlers[0].install_tg_log(self)
+        await logging.getLogger().handlers[0].install_tg_log(self)
         logger.debug("Bot logging installed for %s", self.logchat)
 
         self._pass_config_to_logger()

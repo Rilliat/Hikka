@@ -225,7 +225,7 @@ class TelegramLogsHandler(logging.Handler):
         self.lvl = logging.NOTSET
         self._send_lock = asyncio.Lock()
 
-    def install_tg_log(self, mod: Module):
+    async def install_tg_log(self, mod: Module):
         if getattr(self, "_task", False):
             self._task.cancel()
 
@@ -234,10 +234,13 @@ class TelegramLogsHandler(logging.Handler):
         if mod.db.get(__name__, "debugger", False):
             self.web_debugger = WebDebugger()
 
-        self._task = asyncio.ensure_future(self.queue_poller())
+        # self._task = asyncio.ensure_future(self.queue_poller())
+        logging.error('L238 log.py')
+        self._task = await asyncio.gather(self.queue_poller())
 
     async def queue_poller(self):
         while True:
+            logging.error('L243 log.py')
             with contextlib.suppress(Exception):
                 await self.sender()
             await asyncio.sleep(3)
