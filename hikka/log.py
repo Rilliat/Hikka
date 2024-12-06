@@ -390,7 +390,7 @@ class TelegramLogsHandler(logging.Handler):
             #                 ],
             #             ),
             #         )
-
+            logging.error('393 line log.py')
             self._exc_queue = {
                 client_id: [
                     self._mods[client_id].inline.bot.send_message(
@@ -421,6 +421,7 @@ class TelegramLogsHandler(logging.Handler):
             for exceptions in self._exc_queue.values():
                 for exc in exceptions:
                     await exc
+                    logging.error('424 line log.py')
 
 
             self.tg_buff = []
