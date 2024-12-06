@@ -236,7 +236,7 @@ class TelegramLogsHandler(logging.Handler):
 
         # self._task = asyncio.ensure_future(self.queue_poller())
         logging.error('L238 log.py')
-        self._task = await asyncio.gather(self.queue_poller())
+        self._task = await asyncio.gather(self.queue_poller(), return_exceptions=True)
 
     async def queue_poller(self):
         while True:
