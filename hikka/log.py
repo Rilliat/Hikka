@@ -234,12 +234,8 @@ class TelegramLogsHandler(logging.Handler):
         if mod.db.get(__name__, "debugger", False):
             self.web_debugger = WebDebugger()
 
-        # self._task = asyncio.ensure_future(self.queue_poller())
         logging.error('L238 log.py')
-        # self._task = await asyncio.gather(self.queue_poller(), return_exceptions=True)
         self._task = asyncio.create_task(self.queue_poller())
-        # self._loop = asyncio.get_event_loop()
-        # self._loop.run_until_complete(self.queue_poller())
 
 
     async def queue_poller(self):
@@ -422,7 +418,7 @@ class TelegramLogsHandler(logging.Handler):
                     if isinstance(item[0], HikkaException)
                     and (not item[1] or item[1] == client_id or self.force_send_all)
                 ]
-                for client_id in self._mods
+                for str(client_id) in self._mods
             }
 
             for exceptions in self._exc_queue.values():
