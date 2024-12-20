@@ -24,7 +24,7 @@ from aiogram.types import (
     InputMediaAnimation,
     InputMediaPhoto,
 )
-from aiogram.utils.exceptions import BadRequest, RetryAfter
+from aiogram.exceptions import TelegramBadRequest, TelegramRetryAfter
 from hikkatl.errors.rpcerrorlist import ChatSendInlineForbiddenError
 from hikkatl.extensions.html import CUSTOM_EMOJIS
 from hikkatl.tl.types import Message
@@ -460,9 +460,9 @@ class Gallery(InlineUnit):
                 media=self._get_current_media(unit_id),
                 reply_markup=self._gallery_markup(unit_id),
             )
-        except RetryAfter as e:
+        except TelegramRetryAfter as e:
             await call.answer(
-                f"Got FloodWait. Wait for {e.timeout} seconds",
+                f"Got FloodWait. Wait for {e.retry_after} seconds",
                 show_alert=True,
             )
         except Exception:
@@ -552,14 +552,14 @@ class Gallery(InlineUnit):
                 media=self._get_current_media(unit_id),
                 reply_markup=self._gallery_markup(unit_id),
             )
-        except BadRequest:
+        except TelegramBadRequest:
             logger.debug("Error fetching photo content, attempting load next one")
             del self._units[unit_id]["photos"][self._units[unit_id]["current_index"]]
             self._units[unit_id]["current_index"] -= 1
             return await self._gallery_page(call, page, unit_id)
-        except RetryAfter as e:
+        except TelegramRetryAfter as e:
             await call.answer(
-                f"Got FloodWait. Wait for {e.timeout} seconds",
+                f"Got FloodWait. Wait for {e.retry_after} seconds",
                 show_alert=True,
             )
             return
@@ -674,7 +674,7 @@ class Gallery(InlineUnit):
                         ext = None
 
                     args = {
-                        "thumb_url": "https://img.icons8.com/fluency/344/loading.png",
+                        "thumbnail_url": "https://img.icons8.com/fluency/344/loading.png",
                         "caption": self._get_caption(unit["uid"], index=0),
                         "parse_mode": "HTML",
                         "reply_markup": self._gallery_markup(unit["uid"]),

@@ -128,7 +128,6 @@ class HikkaInfoMod(loader.Module):
             )
         )
 
-
     async def info(self, _: InlineQuery) -> dict:
         """Send userbot info"""
 

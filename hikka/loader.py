@@ -381,7 +381,7 @@ def tag(*tags, **kwarg_tags):
         • `filter` - Capture only messages that pass given function
         • `from_id` - Capture only messages from given user
         • `chat_id` - Capture only messages from given chat
-        • `thumb_url` - Works for inline command handlers. Will be shown in help
+        • `thumbnail_url` - Works for inline command handlers. Will be shown in help
         • `alias` - Set single alias for a command
         • `aliases` - Set multiple aliases for a command
 

@@ -66,7 +66,7 @@ class HikkaBackupMod(loader.Module):
             silent=True,
             archive=True,
             avatar="https://raw.githubusercontent.com/coddrago/Heroku/refs/heads/v1.6.8/assets/heroku-backups.png",
-            _folder="hikka",
+            _folder="heroku",
             invite_bot=True,
         )
 

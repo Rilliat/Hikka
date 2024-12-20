@@ -806,13 +806,13 @@ async def asset_channel(
         await client(SetHistoryTTLRequest(peer=peer, period=ttl))
 
     if _folder:
-        if _folder != "hikka":
+        if _folder != "heroku":
             raise NotImplementedError
 
         folders = await client(GetDialogFiltersRequest())
 
         try:
-            folder = next(folder for folder in folders if folder.title == "hikka")
+            folder = next(folder for folder in folders if folder.title == "heroku")
         except Exception:
             folder = None
 
@@ -1282,7 +1282,7 @@ def check_url(url: str) -> bool:
 
 def get_git_hash() -> typing.Union[str, bool]:
     """
-    Get current Hikka git hash
+    Get current Heroku git hash
     :return: Git commit hash
     """
     try:

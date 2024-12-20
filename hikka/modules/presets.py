@@ -160,7 +160,7 @@ class Presets(loader.Module):
         )
 
     async def _preset(self, call: InlineCall, preset: str):
-        await call.edit(
+        await call.message.edit(
             self.strings("preset").format(
                 self.strings(f"_{preset}_title"),
                 self.strings(f"_{preset}_desc"),

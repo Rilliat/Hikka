@@ -28,12 +28,11 @@ from aiogram.types import (
     InputMediaPhoto,
     InputMediaVideo,
 )
-from aiogram.utils.exceptions import (
-    BadRequest,
-    MessageIdInvalid,
-    MessageNotModified,
-    RetryAfter,
+from aiogram.exceptions import (
+    TelegramBadRequest,
+    TelegramRetryAfter,
 )
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 from hikkatl.utils import resolve_inline_message_id
 
 from .. import utils
@@ -55,7 +54,7 @@ class Utils(InlineUnit):
         if isinstance(markup_obj, InlineKeyboardMarkup):
             return markup_obj
 
-        markup = InlineKeyboardMarkup()
+        builder = InlineKeyboardBuilder()
 
         map_ = (
             self._units[markup_obj]["buttons"]
@@ -119,14 +118,14 @@ class Utils(InlineUnit):
 
                         line += [
                             InlineKeyboardButton(
-                                button["text"],
+                                text=button["text"],
                                 url=button["url"],
                             )
                         ]
                     elif "callback" in button:
                         line += [
                             InlineKeyboardButton(
-                                button["text"],
+                                text=button["text"],
                                 callback_data=button["_callback_data"],
                             )
                         ]
@@ -162,7 +161,7 @@ class Utils(InlineUnit):
                     elif "input" in button:
                         line += [
                             InlineKeyboardButton(
-                                button["text"],
+                                text=button["text"],
                                 switch_inline_query_current_chat=button["_switch_query"]
                                 + " ",
                             )
@@ -170,21 +169,21 @@ class Utils(InlineUnit):
                     elif "data" in button:
                         line += [
                             InlineKeyboardButton(
-                                button["text"],
+                                text=button["text"],
                                 callback_data=button["data"],
                             )
                         ]
                     elif "web_app" in button:
                         line += [
                             InlineKeyboardButton(
-                                button["text"],
+                                text=button["text"],
                                 web_app=WebAppInfo(button["data"]),
                             )
                         ]
                     elif "switch_inline_query_current_chat" in button:
                         line += [
                             InlineKeyboardButton(
-                                button["text"],
+                                text=button["text"],
                                 switch_inline_query_current_chat=button[
                                     "switch_inline_query_current_chat"
                                 ],
@@ -193,7 +192,7 @@ class Utils(InlineUnit):
                     elif "switch_inline_query" in button:
                         line += [
                             InlineKeyboardButton(
-                                button["text"],
+                                text=button["text"],
                                 switch_inline_query_current_chat=button[
                                     "switch_inline_query"
                                 ],
@@ -216,9 +215,9 @@ class Utils(InlineUnit):
                     )
                     return False
 
-            markup.row(*line)
+            builder.row(*line, width=3)
 
-        return markup
+        return builder.as_markup()
 
     generate_markup = _generate_markup
 
@@ -477,24 +476,25 @@ class Utils(InlineUnit):
                         else unit.get("buttons", [])
                     ),
                 )
-            except MessageNotModified:
+
+            except TelegramRetryAfter as e:
+                logger.info("Sleeping %ss on aiogram FloodWait...", e.retry_after)
+                await asyncio.sleep(e.retry_after)
+                return await self._edit_unit(**utils.get_kwargs())
+
+            except TelegramBadRequest as e:
                 if query:
                     with contextlib.suppress(Exception):
                         await query.answer()
+                    return False
 
-                return False
-            except RetryAfter as e:
-                logger.info("Sleeping %ss on aiogram FloodWait...", e.timeout)
-                await asyncio.sleep(e.timeout)
-                return await self._edit_unit(**utils.get_kwargs())
-            except MessageIdInvalid:
-                with contextlib.suppress(Exception):
-                    await query.answer(
-                        "I should have edited some message, but it is deleted :("
-                    )
+                if 'deleted' in str(e).lower():
+                    with contextlib.suppress(Exception):
+                        await query.answer(
+                            "I should have edited some message, but it is deleted :("
+                        )
+                    return False
 
-                return False
-            except BadRequest as e:
                 if "There is no text in the message to edit" not in str(e):
                     raise
 
@@ -533,11 +533,11 @@ class Utils(InlineUnit):
                     else unit.get("buttons", [])
                 ),
             )
-        except RetryAfter as e:
-            logger.info("Sleeping %ss on aiogram FloodWait...", e.timeout)
-            await asyncio.sleep(e.timeout)
+        except TelegramRetryAfter as e:
+            logger.info("Sleeping %ss on aiogram FloodWait...", e.retry_after)
+            await asyncio.sleep(e.retry_after)
             return await self._edit_unit(**utils.get_kwargs())
-        except MessageIdInvalid:
+        except TelegramBadRequest:
             with contextlib.suppress(Exception):
                 await query.answer(
                     "I should have edited some message, but it is deleted :("

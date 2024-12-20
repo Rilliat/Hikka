@@ -342,7 +342,7 @@ class UnitHeta(loader.Module):
             int(data["dl_id"]),
         )
 
-    @loader.inline_handler(thumb_url="https://img.icons8.com/color/512/hexa.png")
+    @loader.inline_handler(thumbnail_url="https://img.icons8.com/color/512/hexa.png")
     async def heta(self, query: InlineQuery) -> typing.List[dict]:
         if not query.args:
             return {

@@ -361,7 +361,6 @@ class TestMod(loader.Module):
         """- Find out your userbot ping"""
         start = time.perf_counter_ns()
         message = await utils.answer(message, self.config["ping_emoji"])
-
         await utils.answer(
             message,
             self.config["Text_Of_Ping"].format(
@@ -372,7 +371,7 @@ class TestMod(loader.Module):
                 ),
                 hostname=subprocess.run(['hostname'], stdout=subprocess.PIPE).stdout.decode().strip(),
                 user=subprocess.run(['whoami'], stdout=subprocess.PIPE).stdout.decode().strip(),
-    ),
+            ),
         )
 
     async def client_ready(self):
@@ -387,7 +386,7 @@ class TestMod(loader.Module):
 
         self.logchat = int(f"-100{chat.id}")
 
-        logging.getLogger().handlers[0].install_tg_log(self)
+        await logging.getLogger().handlers[0].install_tg_log(self)
         logger.debug("Bot logging installed for %s", self.logchat)
 
         self._pass_config_to_logger()

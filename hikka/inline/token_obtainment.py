@@ -52,7 +52,7 @@ class TokenObtainment(InlineUnit):
                 username = f"@heroku_{uid}_bot"
 
             for msg in [
-                f"🪐 Heroku userbot"[:64],
+                f"🪐 Heroku Userbot"[:64],
                 username,
                 "/setuserpic",
                 username,

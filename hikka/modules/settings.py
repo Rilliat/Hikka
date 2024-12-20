@@ -60,7 +60,7 @@ class CoreMod(loader.Module):
         return f"{str(chatid)}.{module}" if module else chatid
 
     @loader.command(ru_doc="Информация о Хероку", en_doc="Information of Heroku", ua_doc="Інформація про Хероку", de_doc="Informationen über Heroku")
-    async def herokucmd(self, message: Message):
+    async def heroku(self, message: Message):
         await utils.answer_file(
             message,
             "https://imgur.com/a/i0Mq22X.png",

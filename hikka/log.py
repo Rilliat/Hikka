@@ -18,8 +18,9 @@ import traceback
 import typing
 from logging.handlers import RotatingFileHandler
 
+from aiogram import Bot
 import hikkatl
-from aiogram.utils.exceptions import NetworkError
+from aiogram.exceptions import TelegramNetworkError
 
 from . import utils
 from .tl_cache import CustomTelegramClient
@@ -65,7 +66,7 @@ linecache.getlines = getlines
 
 def override_text(exception: Exception) -> typing.Optional[str]:
     """Returns error-specific description if available, else `None`"""
-    if isinstance(exception, NetworkError):
+    if isinstance(exception, TelegramNetworkError):
         return "✈️ <b>You have problems with internet connection on your server.</b>"
 
     return None
@@ -224,7 +225,7 @@ class TelegramLogsHandler(logging.Handler):
         self.lvl = logging.NOTSET
         self._send_lock = asyncio.Lock()
 
-    def install_tg_log(self, mod: Module):
+    async def install_tg_log(self, mod: Module):
         if getattr(self, "_task", False):
             self._task.cancel()
 
@@ -233,7 +234,8 @@ class TelegramLogsHandler(logging.Handler):
         if mod.db.get(__name__, "debugger", False):
             self.web_debugger = WebDebugger()
 
-        self._task = asyncio.ensure_future(self.queue_poller())
+        self._task = asyncio.create_task(self.queue_poller())
+
 
     async def queue_poller(self):
         while True:
@@ -301,7 +303,7 @@ class TelegramLogsHandler(logging.Handler):
                 else {
                     "text": "🪲 Start debugger",
                     "callback": self._start_debugger,
-                    "args": (item,),
+                    "args": (item, self._mods[0].inline.bot,),
                 }
             )
         ]
@@ -310,6 +312,7 @@ class TelegramLogsHandler(logging.Handler):
         self,
         call: "InlineCall",  # type: ignore  # noqa: F821
         item: HikkaException,
+        bot: Bot,
     ):
         if not self.web_debugger:
             self.web_debugger = WebDebugger()
@@ -323,7 +326,8 @@ class TelegramLogsHandler(logging.Handler):
             reply_markup=self._gen_web_debug_button(item),
         )
 
-        await call.answer(
+        await bot.answer_callback_query(
+            call.id,
             (
                 "Web debugger started. You can get PIN using .debugger command. \n⚠️"
                 " !DO NOT GIVE IT TO ANYONE! ⚠️"
@@ -358,17 +362,17 @@ class TelegramLogsHandler(logging.Handler):
             }
 
             self._exc_queue = {
-                client_id: [
-                    self._mods[client_id].inline.bot.send_message(
-                        self._mods[client_id].logchat,
+                str(client_id): [
+                    self._mods[str(client_id)].inline.bot.send_message(
+                        self._mods[str(client_id)].logchat,
                         item[0].message,
-                        reply_markup=self._mods[client_id].inline.generate_markup(
+                        reply_markup=self._mods[str(client_id)].inline.generate_markup(
                             [
                                 {
                                     "text": "🪐 Full traceback",
                                     "callback": self._show_full_trace,
                                     "args": (
-                                        self._mods[client_id].inline.bot,
+                                        self._mods[str(client_id)].inline.bot,
                                         item[0],
                                     ),
                                     "disable_security": True,
@@ -379,7 +383,7 @@ class TelegramLogsHandler(logging.Handler):
                     )
                     for item in self.tg_buff
                     if isinstance(item[0], HikkaException)
-                    and (not item[1] or item[1] == client_id or self.force_send_all)
+                    and (not item[1] or item[1] == str(client_id) or self.force_send_all)
                 ]
                 for client_id in self._mods
             }
@@ -387,6 +391,7 @@ class TelegramLogsHandler(logging.Handler):
             for exceptions in self._exc_queue.values():
                 for exc in exceptions:
                     await exc
+
 
             self.tg_buff = []
 
