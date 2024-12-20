@@ -82,7 +82,7 @@ class InlineStuff(loader.Module):
                     return True
 
     @loader.command()
-    async def ch_hikka_bot(self, message: Message):
+    async def ch_heroku_bot(self, message: Message):
         args = utils.get_args_raw(message).strip("@")
         if (
             not args
@@ -114,6 +114,6 @@ class InlineStuff(loader.Module):
             return
 
         await message.answer_photo(
-            "https://x0.at/KLJs.png",
+            "https://imgur.com/a/0gmlFYI.png",
             caption=self.strings("this_is_hikka"),
         )

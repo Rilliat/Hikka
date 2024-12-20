@@ -61,12 +61,12 @@ class HikkaBackupMod(loader.Module):
 
         self._backup_channel, _ = await utils.asset_channel(
             self._client,
-            "hikka-backups",
+            "heroku-backups",
             "📼 Your database backups will appear here",
             silent=True,
             archive=True,
-            avatar="https://github.com/hikariatama/assets/raw/master/hikka-backups.png",
-            _folder="hikka",
+            avatar="https://raw.githubusercontent.com/coddrago/Heroku/refs/heads/v1.6.8/assets/heroku-backups.png",
+            _folder="heroku",
             invite_bot=True,
         )
 
@@ -125,7 +125,7 @@ class HikkaBackupMod(loader.Module):
 
             backup = io.BytesIO(json.dumps(self._db).encode())
             backup.name = (
-                f"hikka-db-backup-{datetime.datetime.now():%d-%m-%Y-%H-%M}.json"
+                f"heroku-db-backup-{datetime.datetime.now():%d-%m-%Y-%H-%M}.json"
             )
 
             await self.inline.bot.send_document(
@@ -136,7 +136,7 @@ class HikkaBackupMod(loader.Module):
                         [
                             {
                                 "text": "↪️ Restore this",
-                                "data": "hikka/backup/restore/confirm",
+                                "data": "heroku/backup/restore/confirm",
                             }
                         ]
                     ]
@@ -147,21 +147,21 @@ class HikkaBackupMod(loader.Module):
         except loader.StopLoop:
             raise
         except Exception:
-            logger.exception("HikkaBackup failed")
+            logger.exception("HerokuBackup failed")
             await asyncio.sleep(60)
 
     @loader.callback_handler()
     async def restore(self, call: BotInlineCall):
-        if not call.data.startswith("hikka/backup/restore"):
+        if not call.data.startswith("heroku/backup/restore"):
             return
 
-        if call.data == "hikka/backup/restore/confirm":
+        if call.data == "heroku/backup/restore/confirm":
             await utils.answer(
                 call,
                 "❓ <b>Are you sure?</b>",
                 reply_markup={
                     "text": "✅ Yes",
-                    "data": "hikka/backup/restore",
+                    "data": "heroku/backup/restore",
                 },
             )
             return

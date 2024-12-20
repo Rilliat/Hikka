@@ -10,6 +10,7 @@ from hikkatl.utils import get_display_name
 
 from .. import loader, utils, version
 from ..inline.types import InlineQuery
+import subprocess
 
 
 @loader.tds
@@ -24,18 +25,10 @@ class HikkaInfoMod(loader.Module):
                 "custom_message",
                 doc=lambda: self.strings("_cfg_cst_msg"),
             ),
-            loader.ConfigValue(
-                "custom_button",
-                ["🌘 Support chat", "https://t.me/heroku_talks"],
-                lambda: self.strings("_cfg_cst_btn"),
-                validator=loader.validators.Union(
-                    loader.validators.Series(fixed_len=2),
-                    loader.validators.NoneType(),
-                ),
-            ),
+
             loader.ConfigValue(
                 "banner_url",
-                "https://imgur.com/a/aMB7J0S.png",
+                "https://imgur.com/a/7LBPJiq.png",
                 lambda: self.strings("_cfg_banner"),
                 validator=loader.validators.Link(),
             ),
@@ -74,7 +67,7 @@ class HikkaInfoMod(loader.Module):
             ("🐈‍⬛", "<emoji document_id=6334750507294262724>🐈‍⬛</emoji>"),
             ("✌️", "<emoji document_id=5469986291380657759>✌️</emoji>"),
             ("💎", "<emoji document_id=5471952986970267163>💎</emoji>"),
-            ("🛡", "<emoji document_id=5287571024500498635>☁️</emoji>"),
+            ("🛡", "<emoji document_id=5282731554135615450>🌩</emoji>"),
             ("💘", "<emoji document_id=5452140079495518256>💘</emoji>"),
             ("🌼", " <emoji document_id=5224219153077914783>❤️</emoji>"),
         ]:
@@ -82,8 +75,8 @@ class HikkaInfoMod(loader.Module):
 
         return (
             (
-                "<b>🌘 Hikka</b>\n"
-                if "hikka" not in self.config["custom_message"].lower()
+                "<b>🪐 Heroku</b>\n"
+                if "heroku" not in self.config["custom_message"].lower()
                 else ""
             )
             + self.config["custom_message"].format(
@@ -97,6 +90,8 @@ class HikkaInfoMod(loader.Module):
                 cpu_usage=utils.get_cpu_usage(),
                 ram_usage=f"{utils.get_ram_usage()} MB",
                 branch=version.branch,
+                hostname=subprocess.run(['hostname'], stdout=subprocess.PIPE).stdout.decode().strip(),
+                user=subprocess.run(['whoami'], stdout=subprocess.PIPE).stdout.decode().strip(),
             )
             if self.config["custom_message"]
             else (
@@ -117,8 +112,8 @@ class HikkaInfoMod(loader.Module):
                     (
                         (
                             utils.get_platform_emoji()
-                            if self._client.hikka_me.premium and not inline
-                            else "🌘 Hikka"
+                            if self._client.hikka_me.premium
+                            else "🪐 Heroku"
                         ),
                         "<emoji document_id=5373141891321699086>😎</emoji>",
                         "<emoji document_id=5469741319330996757>💫</emoji>",
@@ -133,20 +128,6 @@ class HikkaInfoMod(loader.Module):
             )
         )
 
-    def _get_mark(self):
-        return (
-            {
-                "text": self.config["custom_button"][0],
-                "url": self.config["custom_button"][1],
-            }
-            if self.config["custom_button"]
-            else None
-        )
-
-    @loader.inline_handler(
-        thumbnail_url="https://img.icons8.com/external-others-inmotus-design/344/external-Moon-round-icons-others-inmotus-design-2.png"
-    )
-    @loader.inline_everyone
     async def info(self, _: InlineQuery) -> dict:
         """Send userbot info"""
 
@@ -166,23 +147,11 @@ class HikkaInfoMod(loader.Module):
 
     @loader.command()
     async def infocmd(self, message: Message):
-        if self.config["custom_button"]:
-            await self.inline.form(
-                message=message,
-                text=self._render_info(True),
-                reply_markup=self._get_mark(),
-                **(
-                    {"photo": self.config["banner_url"]}
-                    if self.config["banner_url"]
-                    else {}
-                ),
-            )
-        else:
-            await utils.answer_file(
-                message,
-                self.config["banner_url"],
-                self._render_info(False),
-            )
+        await utils.answer_file(
+            message,
+            self.config["banner_url"],
+            self._render_info(False),
+        )
 
     @loader.command()
     async def hikkainfo(self, message: Message):

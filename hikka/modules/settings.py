@@ -27,6 +27,11 @@ class CoreMod(loader.Module):
                 "Allow non-standard prefixes like premium emojis or multi-symbol prefixes",
                 validator=loader.validators.Boolean(),
             ),
+            loader.ConfigValue(
+                "alias_emoji",
+                "<emoji document_id=4974259868996207180>▪️</emoji>",
+                "just emoji in .aliases",
+            ),
         )
 
     async def blacklistcommon(self, message: Message):
@@ -54,27 +59,25 @@ class CoreMod(loader.Module):
         module = self.allmodules.get_classname(module)
         return f"{str(chatid)}.{module}" if module else chatid
 
-    @loader.command()
-    async def hikkacmd(self, message: Message):
+    @loader.command(ru_doc="Информация о Хероку", en_doc="Information of Heroku", ua_doc="Інформація про Хероку", de_doc="Informationen über Heroku")
+    async def heroku(self, message: Message):
         await utils.answer_file(
             message,
-            "https://imgur.com/a/mqhVESA.png",
+            "https://imgur.com/a/i0Mq22X.png",
             self.strings("hikka").format(
                 (
                     utils.get_platform_emoji()
                     if self._client.hikka_me.premium and CUSTOM_EMOJIS
-                    else "🌘 <b>Hikka userbot</b>"
+                    else "🌘 <b>Heroku userbot</b>"
                 ),
                 *version.__version__,
                 utils.get_commit_url(),
                 f"{hikkatl.__version__} #{hikkatl.tl.alltlobjects.LAYER}",
             )
             + (
-                (
-                    "\n\n<emoji document_id=5287454910059654880>❤️</emoji> <b>Designer: t.me/tr4mq</b>"
-                )
-                if random.choice([0, 1]) == 1
-                else ""
+                ""
+                if version.branch == "master"
+                else self.strings("unstable").format(version.branch)
             ),
         )
 
@@ -179,7 +182,7 @@ class CoreMod(loader.Module):
             self.strings("aliases")
             + "\n".join(
                 [
-                    f"<emoji document_id=4974259868996207180>🛑</emoji> <code>{i}</code> &lt;- {y}"
+                    (self.config["alias_emoji"] + f" <code>{i}</code> &lt;- {y}")
                     for i, y in self.allmodules.aliases.items()
                 ]
             ),
@@ -262,7 +265,7 @@ class CoreMod(loader.Module):
 
         await self.client.send_file(
             message.peer_id,
-            "https://imgur.com/a/AYmh8W8.png",
+            "https://imgur.com/a/HrrFair.png",
             caption=self.strings["installation"].format('{}', prefix=self.get_prefix()), reply_to=getattr(message, "reply_to_msg_id", None),)
     
         await message.delete()

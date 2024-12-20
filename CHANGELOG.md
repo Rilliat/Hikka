@@ -1,4 +1,13 @@
-# Hikka Changelog
+# Heroku Changelog
+## 🪐 Heroku 1.6.8
+
+- Finally renamed to Heroku and new Emoji
+- rewritten bot from aio2 to aio3
+- many changes and improvements
+- many bugs fixed, work sped up
+- replacing UpgradedEval with Executor
+- added non-standrart prefixes
+
 ## 🌑 Hikka 1.6.7
 
 - new design

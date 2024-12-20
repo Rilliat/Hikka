@@ -39,7 +39,7 @@ class UpdaterMod(loader.Module):
         self.config = loader.ModuleConfig(
             loader.ConfigValue(
                 "GIT_ORIGIN_URL",
-                "https://github.com/coddrago/Hikka",
+                "https://github.com/coddrago/Heroku",
                 lambda: self.strings("origin_cfg_doc"),
                 validator=loader.validators.Link(),
             )
@@ -111,7 +111,7 @@ class UpdaterMod(loader.Module):
                 if self._client.hikka_me.premium
                 and CUSTOM_EMOJIS
                 and isinstance(msg_obj, Message)
-                else "Hikka"
+                else "Heroku"
             ),
         )
 
@@ -352,6 +352,7 @@ class UpdaterMod(loader.Module):
                                 1554874075,
                                 1697279580,
                                 1679998924,
+                                2410964167,
                             ]  # official hikka chats
                         ],
                         emoticon="🐱",

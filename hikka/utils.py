@@ -712,7 +712,7 @@ async def invite_inline_bot(
                 channel=peer,
                 user_id=client.loader.inline.bot_username,
                 admin_rights=ChatAdminRights(ban_users=True),
-                rank="Hikka",
+                rank="Heroku",
             )
         )
 
@@ -753,6 +753,10 @@ async def asset_channel(
         and client._channels_cache[title]["exp"] > time.time()
     ):
         return client._channels_cache[title]["peer"], False
+
+    # legacy heroku / hikka chats conversion to heroku
+    if title.startswith("hikka-"):
+        title = title.replace("hikka-", "heroku-")
 
     async for d in client.iter_dialogs():
         if d.title == title:
@@ -802,13 +806,13 @@ async def asset_channel(
         await client(SetHistoryTTLRequest(peer=peer, period=ttl))
 
     if _folder:
-        if _folder != "hikka":
+        if _folder != "heroku":
             raise NotImplementedError
 
         folders = await client(GetDialogFiltersRequest())
 
         try:
-            folder = next(folder for folder in folders if folder.title == "hikka")
+            folder = next(folder for folder in folders if folder.title == "heroku")
         except Exception:
             folder = None
 
@@ -953,14 +957,18 @@ def get_platform_emoji() -> str:
 
     BASE = "".join(
         (
-            "<emoji document_id={}>🌘</emoji>",
-            "<emoji document_id=5195311729663286630>🌘</emoji>",
-            "<emoji document_id=5195045669324201904>🌘</emoji>",
+            "<emoji document_id={}>🪐</emoji>",
+            "<emoji document_id=5352934134618549768>🪐</emoji>",
+            "<emoji document_id=5352663371290271790>🪐</emoji>",
+            "<emoji document_id=5350822883314655367>🪐</emoji>",
         )
     )
 
-    if main.IS_DOCKER:
-        return BASE.format(5298554256603752468)
+    if main.IS_TOTHOST:
+        return BASE.format(5372887118156683469)
+
+    if main.IS_HIKKAHOST:
+        return BASE.format(5395745114494624362)
 
     if main.IS_ORACLE:
         return BASE.format(5195381467047288408)
@@ -972,7 +980,7 @@ def get_platform_emoji() -> str:
         return BASE.format(5192765204898783881)
 
     if main.IS_LAVHOST:
-        return BASE.format(5301078610747074753)
+        return BASE.format(5352753797531721191)
 
     if main.IS_GOORM:
         return BASE.format(5298947740032573902)
@@ -981,15 +989,15 @@ def get_platform_emoji() -> str:
         return BASE.format(5194976881127989720)
 
     if main.IS_TERMUX:
-        return BASE.format(5193051778001673828)
+        return BASE.format(5350588498359377932)
 
     if main.IS_RAILWAY:
-        return BASE.format(5199607521593007466)
+        return BASE.format(5352539534498224966)
 
-    if main.IS_HIKKAHOST:
-        return BASE.format(5370731117588523522)
+    if main.IS_DOCKER:
+        return BASE.format(5352678227582152630)
 
-    return BASE.format(5192765204898783881)
+    return BASE.format(5393588431026674882)
 
 
 def uptime() -> int:
@@ -1274,7 +1282,7 @@ def check_url(url: str) -> bool:
 
 def get_git_hash() -> typing.Union[str, bool]:
     """
-    Get current Hikka git hash
+    Get current Heroku git hash
     :return: Git commit hash
     """
     try:
@@ -1285,12 +1293,12 @@ def get_git_hash() -> typing.Union[str, bool]:
 
 def get_commit_url() -> str:
     """
-    Get current Hikka git commit url
+    Get current Heroku git commit url
     :return: Git commit url
     """
     try:
         hash_ = get_git_hash()
-        return f'<a href="https://github.com/coddrago/Hikka/commit/{hash_}">#{hash_[:7]}</a>'
+        return f'<a href="https://github.com/coddrago/Heroku/commit/{hash_}">#{hash_[:7]}</a>'
     except Exception:
         return "Unknown"
 
@@ -1580,7 +1588,7 @@ def get_git_info() -> typing.Tuple[str, str]:
     hash_ = get_git_hash()
     return (
         hash_,
-        f"https://github.com/coddrago/Hikka/commit/{hash_}" if hash_ else "",
+        f"https://github.com/coddrago/Heroku/commit/{hash_}" if hash_ else "",
     )
 
 

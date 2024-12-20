@@ -77,18 +77,18 @@ class HikkaSettingsMod(loader.Module):
             if (
                 dialog.name
                 in {
-                    "hikka-logs",
-                    "hikka-onload",
-                    "hikka-assets",
-                    "hikka-backups",
-                    "hikka-acc-switcher",
+                    "heroku-logs",
+                    "heroku-onload",
+                    "heroku-assets",
+                    "heroku-backups",
+                    "heroku-acc-switcher",
                     "silent-tags",
                 }
                 and dialog.is_channel
                 and (
                     dialog.entity.participants_count == 1
                     or dialog.entity.participants_count == 2
-                    and dialog.name in {"hikka-logs", "silent-tags"}
+                    and dialog.name in {"heroku-logs", "silent-tags"}
                 )
                 or (
                     self._client.loader.inline.init_complete
@@ -102,7 +102,7 @@ class HikkaSettingsMod(loader.Module):
 
         folders = await self._client(GetDialogFiltersRequest())
 
-        if any(folder.title == "hikka" for folder in folders):
+        if any(folder.title == "heroku" for folder in folders):
             folder_id = max(
                 folders,
                 key=lambda x: x.id,
@@ -154,7 +154,7 @@ class HikkaSettingsMod(loader.Module):
         )
 
     @loader.command()
-    async def uninstall_hikka(self, message: Message):
+    async def uninstall_heroku(self, message: Message):
         await self.inline.form(
             self.strings("deauth_confirm"),
             message,
@@ -697,7 +697,7 @@ class HikkaSettingsMod(loader.Module):
                     {
                         "text": self.strings("disable_debugger"),
                         "callback": self.inline__setting,
-                        "args": lambda: self._db.set(log.__name__, "debugger", False),
+                        "args": (lambda: self._db.set(log.__name__, "debugger", False),),
                     }
                     if self._db.get(log.__name__, "debugger", False)
                     else {

@@ -1,64 +1,49 @@
-# Dockerfile from https://github.com/python-poetry/poetry/discussions/1879
-# `python-base` sets up all our shared environment variables
-FROM python:3.9.5-slim as python-base
-ENV PYTHONUNBUFFERED=1 \
-    # prevents python creating .pyc as files
-    PYTHONDONTWRITEBYTECODE=1 \
-    \
-    # pip
-    PIP_NO_CACHE_DIR=off \
-    PIP_DISABLE_PIP_VERSION_CHECK=on \
-    PIP_DEFAULT_TIMEOUT=100 \
-    \
-    # poetry
-    # https://python-poetry.org/docs/configuration/#using-environment-variables
-    POETRY_VERSION=1.6.1 \
-    # make poetry install to this location
-    POETRY_HOME="/opt/poetry" \
-    # make poetry create the virtual environment in the project's root
-    # it gets named `.venv`
-    POETRY_VIRTUALENVS_IN_PROJECT=true \
-    # do not ask any interactive question
-    POETRY_NO_INTERACTION=1 \
-    \
-    # paths
-    # this is where our requirements + virtual environment will live
-    PYSETUP_PATH="/opt/pysetup" \
-    VENV_PATH="/opt/pysetup/.venv" \
-    # Hikka
-    DOCKER=true \
-    GIT_PYTHON_REFRESH=quiet
+# thanks vsecoder
 
-# prepend poetry and venv to path
-ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
+# -------------------------------
+# Используем образ python:3.10-slim как базовый для этапа сборки
+FROM python:3.10-slim AS builder
+# Отключаем кэширование pip, чтобы уменьшить размер образа
+ENV PIP_NO_CACHE_DIR=1
+# Устанавливаем необходимые пакеты для сборки Python пакетов и git
+RUN apt-get update && \
+    apt-get install -y --fix-missing --no-install-recommends git python3-dev gcc
+# Очищаем кэш apt для уменьшения размера образа
+RUN rm -rf /var/lib/apt/lists/ /var/cache/apt/archives/ /tmp/*
+# Клонируем репозиторий Hikka
+RUN git clone https://github.com/coddrago/Hikka /Hikka
+# Создаем виртуальное окружение Python
+RUN python -m venv /venv
+# Устанавливаем зависимости проекта
+RUN /venv/bin/pip install --no-warn-script-location --no-cache-dir -r /Hikka/requirements.txt
 
-
-# `builder-base` stage is used to build deps + create our virtual environment
-FROM python-base as builder-base
-RUN apt-get update && apt-get install --no-install-recommends -y \
-    # deps for installing poetry
-    curl \
-    # deps for building python deps
-    build-essential
-
-# install poetry - respects $POETRY_VERSION & $POETRY_HOME
-RUN curl -sSL https://install.python-poetry.org | python -
-
-# copy project requirement files here to ensure they will be cached.
-WORKDIR $PYSETUP_PATH
-COPY poetry.lock pyproject.toml ./
-
-# install runtime deps - uses $POETRY_VIRTUALENVS_IN_PROJECT internally
-RUN poetry install --no-dev
-
-
-# `production` image used for runtime
-FROM python-base as production
-COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
-
-WORKDIR /data/Hikka
-COPY . /data/Hikka
-
+# -------------------------------
+# Используем другой базовый образ для финального контейнера
+FROM python:3.10-slim
+# Устанавливаем необходимые пакеты для работы приложения
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    curl libcairo2 git ffmpeg libmagic1 \
+    libavcodec-dev libavutil-dev libavformat-dev \
+    libswscale-dev libavdevice-dev neofetch wkhtmltopdf gcc python3-dev
+# Устанавливаем Node.js
+RUN curl -sL https://deb.nodesource.com/setup_18.x -o nodesource_setup.sh && \
+    bash nodesource_setup.sh && \
+    apt-get install -y nodejs && \
+    rm nodesource_setup.sh
+# Очищаем кэш apt для уменьшения размера образа
+RUN rm -rf /var/lib/apt/lists/ /var/cache/apt/archives/ /tmp/*
+# Устанавливаем переменные окружения для работы приложения
+ENV DOCKER=true \
+    GIT_PYTHON_REFRESH=quiet \
+    PIP_NO_CACHE_DIR=1
+# Копируем собранное приложение и виртуальное окружение из этапа сборки
+COPY --from=builder /Hikka /Hikka
+COPY --from=builder /venv /Hikka/venv
+# Устанавливаем рабочую директорию
+WORKDIR /Hikka
+# Открываем порт 8080 для доступа к приложению
 EXPOSE 8080
 
-CMD python -m hikka
+# Определяем команду запуска приложения
+CMD ["python3", "-m", "hikka"]

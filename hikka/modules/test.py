@@ -8,6 +8,7 @@ import inspect
 import logging
 import os
 import random
+import subprocess
 import time
 import typing
 from io import BytesIO
@@ -34,21 +35,6 @@ class TestMod(loader.Module):
 
     strings = {
         "name": "Tester",
-        "configping": "Your custom text.\n"
-        "You can use placeholders:\n"
-        "{ping} - That's your ping.\n"
-        "{uptime} - It's your uptime.\n"
-        "{ping_hint} - This is the same hint as in the hikka module, it is chosen with random chance, also you can specify this hint in the config ",
-        "hint": "Set a hint",
-    }
-
-    strings_ru = {
-        "configping": "Ваш кастомный текст.\n"
-        "Вы можете использовать плейсхолдеры:\n"
-        "{ping} - Это ваш пинг\n"
-        "{uptime} - Это ваш аптайм\n"
-        "{ping_hint} - подсказка\n",
-        "hint": "Укажите подсказку",
     }
 
     def __init__(self):
@@ -58,7 +44,7 @@ class TestMod(loader.Module):
                 "force_send_all",
                 False,
                 (
-                    "⚠️ Do not touch, if you don't know what it does!\nBy default,"
+                    "⚠️ Do not touch, if you don't know what it does!\nBy default, "
                     " Hikka will try to determine, which client caused logs. E.g. there"
                     " is a module TestModule installed on Client1 and TestModule2 on"
                     " Client2. By default, Client2 will get logs from TestModule2, and"
@@ -98,6 +84,12 @@ class TestMod(loader.Module):
                 "hint",
                 None,
                 lambda: self.strings["hint"],
+                validator=loader.validators.String(),
+            ),
+            loader.ConfigValue(
+                "ping_emoji",
+                "🪐",
+                lambda: self.strings["ping_emoji"],
                 validator=loader.validators.String(),
             ),
         )
@@ -321,7 +313,7 @@ class TestMod(loader.Module):
         logs = self.lookup("evaluator").censor(logs)
 
         logs = BytesIO(logs.encode("utf-16"))
-        logs.name = "hikka-logs.txt"
+        logs.name = "heroku-logs.txt"
 
         ghash = utils.get_git_hash()
 
@@ -329,7 +321,7 @@ class TestMod(loader.Module):
             *main.__version__,
             (
                 " <a"
-                f' href="https://github.com/coddrago/Hikka/commit/{ghash}">@{ghash[:8]}</a>'
+                f' href="https://github.com/coddrago/Heroku/commit/{ghash}">@{ghash[:8]}</a>'
                 if ghash
                 else ""
             ),
@@ -368,8 +360,7 @@ class TestMod(loader.Module):
     async def ping(self, message: Message):
         """- Find out your userbot ping"""
         start = time.perf_counter_ns()
-        message = await utils.answer(message, "🌘")
-
+        message = await utils.answer(message, self.config["ping_emoji"])
         await utils.answer(
             message,
             self.config["Text_Of_Ping"].format(
@@ -378,17 +369,19 @@ class TestMod(loader.Module):
                 ping_hint=(
                     (self.config["hint"]) if random.choice([0, 0, 1]) == 1 else ""
                 ),
+                hostname=subprocess.run(['hostname'], stdout=subprocess.PIPE).stdout.decode().strip(),
+                user=subprocess.run(['whoami'], stdout=subprocess.PIPE).stdout.decode().strip(),
             ),
         )
 
     async def client_ready(self):
         chat, _ = await utils.asset_channel(
             self._client,
-            "hikka-logs",
-            "🌘 Your Hikka logs will appear in this chat",
+            "heroku-logs",
+            "🪐 Your Heroku logs will appear in this chat",
             silent=True,
             invite_bot=True,
-            avatar="https://github.com/coddrago/assets/raw/master/hikka-logs.png",
+            avatar="https://raw.githubusercontent.com/coddrago/Heroku/refs/heads/v1.6.8/assets/heroku-logs.png",
         )
 
         self.logchat = int(f"-100{chat.id}")

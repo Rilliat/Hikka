@@ -25,6 +25,7 @@ SUPPORTED_LANGUAGES = {
     "en": "🇬🇧 English",
     "ru": "🇷🇺 Русский",
     "ua": "🇺🇦 Український",
+    "de": "🇩🇪 Deutsch",
 }
 
 
