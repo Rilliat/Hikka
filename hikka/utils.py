@@ -986,7 +986,7 @@ def get_platform_emoji() -> str:
         return BASE.format(5298947740032573902)
 
     if main.IS_CODESPACES:
-        return BASE.format(5194976881127989720)
+        return BASE.format(5350807743554937610)
 
     if main.IS_TERMUX:
         return BASE.format(5350588498359377932)

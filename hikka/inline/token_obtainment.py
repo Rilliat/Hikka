@@ -72,7 +72,7 @@ class TokenObtainment(InlineUnit):
                 await fw_protect()
                 from .. import main
 
-                m = await conv.send_file(main.BASE_PATH / "assets" / "heroku_ava.png")
+                m = await conv.send_file(main.BASE_PATH / "assets" / "heroku-ava.png")
                 r = await conv.get_response()
 
                 logger.debug(">> <Photo>")
@@ -221,7 +221,7 @@ class TokenObtainment(InlineUnit):
                         from .. import main
 
                         m = await conv.send_file(
-                            main.BASE_PATH / "assets" / "heroku_ava.png"
+                            main.BASE_PATH / "assets" / "heroku-ava.png"
                         )
                         r = await conv.get_response()
 

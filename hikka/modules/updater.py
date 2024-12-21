@@ -353,7 +353,7 @@ class UpdaterMod(loader.Module):
                                 1697279580,
                                 1679998924,
                                 2410964167,
-                            ]  # official hikka chats
+                            ]  # official heroku chats
                         ],
                         emoticon="🐱",
                         exclude_peers=[],
