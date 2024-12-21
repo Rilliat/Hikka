@@ -44,5 +44,6 @@ COPY --from=builder /venv /Hikka/venv
 WORKDIR /Hikka
 # Открываем порт 8080 для доступа к приложению
 EXPOSE 8080
+
 # Определяем команду запуска приложения
 CMD ["python3", "-m", "hikka"]
