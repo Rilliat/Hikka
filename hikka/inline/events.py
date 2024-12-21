@@ -208,6 +208,7 @@ class Events(InlineUnit):
     async def _callback_query_handler(
         self,
         call: CallbackQuery,
+        bot: "aiogram.Bot", # type: ignore
         reply_markup: typing.Optional[
             typing.List[typing.List[typing.Dict[str, typing.Any]]]
         ] = None,
@@ -219,6 +220,8 @@ class Events(InlineUnit):
         if re.search(r"authorize_web_(.{8})", call.data):
             self._web_auth_tokens += [re.search(r"authorize_web_(.{8})", call.data)[1]]
             return
+
+        call.as_(bot)
 
         for func in self._allmodules.callback_handlers.values():
             if await self.check_inline_security(func=func, user=call.from_user.id):
