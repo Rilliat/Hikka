@@ -87,17 +87,8 @@ class Web(root.Web):
                 )
 
         if not url:
-            ip = (
-                "127.0.0.1"
-                if "DOCKER" not in os.environ
-                else subprocess.run(
-                    ["hostname", "-i"],
-                    stdout=subprocess.PIPE,
-                    check=True,
-                )
-                .stdout.decode("utf-8")
-                .strip()
-            )
+            # вырезана проверка на докер
+            ip = "127.0.0.1"
 
             url = f"http://{ip}:{self.port}"
 

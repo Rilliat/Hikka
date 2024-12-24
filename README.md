@@ -10,7 +10,7 @@
 
 ### Disclaimer
 
-> Even though Hikka has extended security measures for scam-modules protection, flood-based account restrictions protection and others, it still may cause damage to server / account if you install module from untrusted developer. Please, consider downloading modules exceptionally from official repository or from trusted developers. If you are not sure about whether module is safe or not, please, DO NOT INSTALL IT. Same goes for unknown commands (.terminal, .e, .eval, .ec, .ecpp, etc.). You have been warned.
+> Even though Heroku has extended security measures for scam-modules protection, flood-based account restrictions protection and others, it still may cause damage to server / account if you install module from untrusted developer. Please, consider downloading modules exceptionally from official repository or from trusted developers. If you are not sure about whether module is safe or not, please, DO NOT INSTALL IT. Same goes for unknown commands (.terminal, .e, .eval, .ec, .ecpp, etc.). You have been warned.
 
 <hr>
 <h2><img src="https://github.com/coddrago/assets/raw/master/1326-command-window-line-flat.webp" height="54" align="middle"> Installation</h2>
@@ -19,10 +19,9 @@
 
 <img src="https://github.com/hikariatama/assets/raw/master/install_qr.gif" height="256">
 
-<a href="https://t.me/lavhostbot?start=SGlra2E"><img src="https://user-images.githubusercontent.com/36935426/167272288-85f00779-4b98-47da-8d0d-ea2c6370b979.png" height="40"></a>
 
 <b>Manual installation (no script):</b><br>
-<code>apt update && apt install git libcairo2 -y && git clone https://github.com/coddrago/Hikka && cd Hikka && pip install -r requirements.txt && python3 -m hikka</code><br.>
+<code>apt update && apt install git python3 -y && git clone https://github.com/coddrago/Heroku && cd Heroku && pip install -r requirements.txt && python3 -m hikka</code><br.>
 <i>If you are on VPS\VDS, type <code>--proxy-pass</code> in the end of command to open SSH tunnel to your Hikka web interface, or use <code>--no-web</code> to complete setup in console</i><br>
 <br>
 <b>Some further details:</b>
@@ -58,10 +57,10 @@
 <hr>
 <h2 border="none"><img src="https://github.com/hikariatama/assets/raw/master/680-it-developer-flat.webp" height="54" align="middle"> Documentation</h2>
 
-Check out <a href="https://dev.hikka.pw">dev.hikka.pw</a> for developers' documentation and <a href="https://hikka.pw">hikka.pw</a> for users' documentation<br>
+Check out <a href="https://web.archive.org/dev.hikka.pw">dev.hikka.pw</a> for developers' documentation and <a href="https://web.archive.org/hikka.pw">hikka.pw</a> for users' documentation<br>
 
 <hr>
-<h2 border="none"><img src="https://github.com/hikariatama/assets/raw/master/981-consultation-flat.webp" height="54" align="middle"> <a href="https://t.me/hikka_talks">Support</a></h2>
+<h2 border="none"><img src="https://github.com/hikariatama/assets/raw/master/981-consultation-flat.webp" height="54" align="middle"> <a href="https://t.me/heroku_talks">Support</a></h2>
 <hr>
 <h2 border="none"><img src="https://github.com/hikariatama/assets/raw/master/541-hand-washing-step-12-flat.webp" height="54" align="middle"> Features</h2>
 <table>
@@ -123,7 +122,7 @@ Check out <a href="https://dev.hikka.pw">dev.hikka.pw</a> for developers' docume
 <img src="https://user-images.githubusercontent.com/36935426/202842278-37fbc518-1679-45d7-92f5-9e519275630d.png">
 
 <hr>
-<i>⚠️ This project is provided as-is. Developer doesn't take ANY responsibility over any problems, caused by userbot. By installing Hikka you take all risks on you. This is but not limited to account bans, deleted (by Telegram algorithms) messages, SCAM-modules, leaked sessions (due to SCAM-modules). It is <b>highly</b> recommended to enable the API Flood protection (.api_fw_protection) and not to install many modules at once. By using Hikka you give your consent to any actions made by your account in background in purposes of automatization. Please, consider reading https://core.telegram.org/api/terms for more information.</i>
+<i>⚠️ This project is provided as-is. Developer doesn't take ANY responsibility over any problems, caused by userbot. By installing Heroku you take all risks on you. This is but not limited to account bans, deleted (by Telegram algorithms) messages, SCAM-modules, leaked sessions (due to SCAM-modules). It is <b>highly</b> recommended to enable the API Flood protection (.api_fw_protection) and not to install many modules at once. By using Heroku you give your consent to any actions made by your account in background in purposes of automatization. Please, consider reading https://core.telegram.org/api/terms for more information.</i>
 
 <b>Special thanks to:</b>
 
